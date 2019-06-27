@@ -2,6 +2,9 @@ package com.blasko.shop.controller;
 
 import com.blasko.shop.config.TemplateEngineUtil;
 
+import com.blasko.shop.dao.SupplierDao;
+import com.blasko.shop.dao.implementation.SupplierDaoMem;
+import com.blasko.shop.model.Supplier;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
@@ -16,6 +19,8 @@ import java.io.PrintWriter;
 @WebServlet(urlPatterns = {"/"})
 public class HomeController extends HttpServlet {
 
+    SupplierDao sd = SupplierDaoMem.getInstance();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
@@ -27,7 +32,8 @@ public class HomeController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String suppliername = req.getParameter("suppliername");
         String supplierdescription = req.getParameter("supplierdescription");
-        System.out.println(suppliername + "/" + supplierdescription);
+        Supplier newSupplier = new Supplier(suppliername, supplierdescription);
+        sd.add(newSupplier);
 
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
