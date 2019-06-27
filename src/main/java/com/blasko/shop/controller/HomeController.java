@@ -34,7 +34,6 @@ public class HomeController extends HttpServlet {
         String supplierdescription = req.getParameter("supplierdescription");
         Supplier newSupplier = new Supplier(suppliername, supplierdescription);
         sd.add(newSupplier);
-
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
         engine.process("product/index.html", context, resp.getWriter());
