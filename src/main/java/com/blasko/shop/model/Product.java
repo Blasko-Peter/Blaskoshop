@@ -113,4 +113,8 @@ public class Product {
         this.image = image;
     }
 
+    public String getPriceForm() {
+        return String.valueOf(this.price) + " " + this.currency;
+    }
+
 }
