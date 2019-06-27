@@ -30,13 +30,11 @@ public class SupplierDaoMem implements SupplierDao{
         int supplierId = supplier.getId();
         String supplierName = supplier.getName();
         String supplierDescription = supplier.getDescription();
-//        System.out.println("Ez itt a supplier: " + supplierId + "/" + supplierName + "/" + supplierDescription);
         try {
             Class.forName("org.postgresql.Driver");
             Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
             PreparedStatement stmt = con.prepareStatement("INSERT INTO suppliers values('"+supplierId+"','"+supplierName+"','"+supplierDescription+"')");
             stmt.execute();
-
         } catch (Exception ex) {
             System.out.println(ex);
         }
