@@ -1,6 +1,8 @@
 package com.blasko.shop.controller;
 
 import com.blasko.shop.config.TemplateEngineUtil;
+import com.blasko.shop.dao.ProductDao;
+import com.blasko.shop.dao.implementation.ProductDaoMem;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 

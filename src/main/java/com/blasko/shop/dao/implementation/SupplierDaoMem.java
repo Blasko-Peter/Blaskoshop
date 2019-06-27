@@ -47,7 +47,19 @@ public class SupplierDaoMem implements SupplierDao{
 
     @Override
     public Supplier find(int id) {
-        return null;
+        Supplier supplier = null;
+        try {
+            Class.forName("org.postgresql.Driver");
+            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM suppliers WHERE id = " + id);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                supplier = new Supplier(rs.getInt("id"), rs.getString("name"), rs.getString("description"));
+            }
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        return supplier;
     }
 
     @Override

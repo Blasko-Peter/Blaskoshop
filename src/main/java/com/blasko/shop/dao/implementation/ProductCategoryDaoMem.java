@@ -49,7 +49,19 @@ public class ProductCategoryDaoMem implements ProductCategoryDao {
 
     @Override
     public ProductCategory find(int id) {
-        return null;
+        ProductCategory pc = null;
+        try {
+            Class.forName("org.postgresql.Driver");
+            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM productcategories WHERE id = " + id);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                pc = new ProductCategory(rs.getInt("id"), rs.getString("name"), rs.getString("description"), rs.getString("department"));
+            }
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        return pc;
     }
 
     @Override
