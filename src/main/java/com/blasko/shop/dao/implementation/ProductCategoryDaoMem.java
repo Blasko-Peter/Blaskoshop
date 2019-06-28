@@ -12,7 +12,7 @@ import java.util.List;
 
 public class ProductCategoryDaoMem implements ProductCategoryDao {
 
-    private List<ProductCategory> data = new ArrayList<>();
+    private List<ProductCategory> data = null;
     private static ProductCategoryDaoMem instance = null;
 
     private ProductCategoryDaoMem() {
@@ -65,7 +65,25 @@ public class ProductCategoryDaoMem implements ProductCategoryDao {
     }
 
     @Override
+    public ProductCategory find(String name) {
+        ProductCategory pc = null;
+        try {
+            Class.forName("org.postgresql.Driver");
+            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM productcategories WHERE name = '" + name + "';");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                pc = new ProductCategory(rs.getInt("id"), rs.getString("name"), rs.getString("description"), rs.getString("department"));
+            }
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        return pc;
+    }
+
+    @Override
     public List<ProductCategory> getAll() {
+        data = new ArrayList<>();
         try {
             Class.forName("org.postgresql.Driver");
             Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");

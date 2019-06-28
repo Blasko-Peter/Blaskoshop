@@ -7,7 +7,9 @@ import com.blasko.shop.dao.SupplierDao;
 import com.blasko.shop.dao.implementation.ProductCategoryDaoMem;
 import com.blasko.shop.dao.implementation.ProductDaoMem;
 import com.blasko.shop.dao.implementation.SupplierDaoMem;
+import com.blasko.shop.model.Product;
 import com.blasko.shop.model.ProductCategory;
+import com.blasko.shop.model.Supplier;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
@@ -17,6 +19,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet(urlPatterns = {"/"})
 public class HomeController extends HttpServlet {
@@ -25,15 +29,47 @@ public class HomeController extends HttpServlet {
     ProductDao pd = ProductDaoMem.getInstance();
     SupplierDao sd = SupplierDaoMem.getInstance();
 
+    private String categorySearch = "Choose...";
+    private String supplierSearch = "Choose...";
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
         context.setVariable("categories", pcd.getAll());
         context.setVariable("suppliers", sd.getAll());
-        context.setVariable("category", pcd.find(1));
-        context.setVariable("products", pd.getBy(pcd.find(1)));
+        context.setVariable("products", getActualProducts());
         engine.process("product/index.html", context, resp.getWriter());
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        categorySearch = req.getParameter("categorysearch");
+        supplierSearch = req.getParameter("suppliersearch");
+        TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
+        WebContext context = new WebContext(req, resp, req.getServletContext());
+        context.setVariable("categories", pcd.getAll());
+        context.setVariable("suppliers", sd.getAll());
+        context.setVariable("products", getActualProducts());
+        engine.process("product/index.html", context, resp.getWriter());
+    }
+
+    private List<Product> getActualProducts(){
+        List<Product> actualProduct = new ArrayList<>();
+        if(categorySearch.equals("Choose...") && supplierSearch.equals("Choose...")){
+            actualProduct = pd.getAll();
+        } else if(categorySearch.equals("Choose...") && !supplierSearch.equals("Choose...")){
+            Supplier supplier = sd.find(supplierSearch);
+            actualProduct = pd.getBy(supplier);
+        } else if(!categorySearch.equals("Choose...") && supplierSearch.equals("Choose...")){
+            ProductCategory productCategory = pcd.find(categorySearch);
+            actualProduct = pd.getBy(productCategory);
+        } else {
+            ProductCategory productCategory = pcd.find(categorySearch);
+            Supplier supplier = sd.find(supplierSearch);
+            actualProduct = pd.getBy(productCategory, supplier);
+        }
+        return actualProduct;
     }
 
 }

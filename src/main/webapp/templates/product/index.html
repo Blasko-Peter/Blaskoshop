@@ -44,7 +44,7 @@
                                 <div class="input-group-prepend">
                                     <label class="input-group-text">Category</label>
                                 </div>
-                                <select class="custom-select">
+                                <select class="custom-select" name="categorysearch" form="searchform">
                                     <option selected>Choose...</option>
                                     <div th:each="category : ${categories}">
                                         <option th:text="${category.name}"></option>
@@ -57,7 +57,7 @@
                                 <div class="input-group-prepend">
                                     <label class="input-group-text">Supplier</label>
                                 </div>
-                                <select class="custom-select">
+                                <select class="custom-select" name="suppliersearch" form="searchform">
                                     <option selected>Choose...</option>
                                     <div th:each="supplier : ${suppliers}">
                                         <option th:text="${supplier.name}"></option>
@@ -67,7 +67,9 @@
                         </div>
                         <div class="col-md-4">
                             <div class="margin-top-16 search">
-                                <button type="button" class="btn btn-secondary hundred-per-cent grey-other">Search</button>
+                                <form id="searchform" action="/" method="post">
+                                    <input type="submit" class="hundred-per-cent grey-other searchbtn" value="Search"/>
+                                </form>
                             </div>
                         </div>
                     </div>
