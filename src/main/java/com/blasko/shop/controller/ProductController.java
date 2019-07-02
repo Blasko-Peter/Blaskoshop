@@ -18,6 +18,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet (urlPatterns = {"/admin/product"})
@@ -27,28 +28,43 @@ public class ProductController extends HttpServlet {
     SupplierDao sd = SupplierDaoMem.getInstance();
     ProductDao pd = ProductDaoMem.getInstance();
 
+    private String message = "";
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
+        String productId = null;
+        HttpSession session = req.getSession();
+        session.setAttribute("productid", productId);
+        context.setVariable("categories", pcd.getAll());
+        context.setVariable("suppliers", sd.getAll());
+        context.setVariable("message", message);
         engine.process("product/product.html", context, resp.getWriter());
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String productname = req.getParameter("productname");
-        String productdescription = req.getParameter("productdescription");
-        float productprice = Float.parseFloat(req.getParameter("productprice"));
-        String productcurrency = req.getParameter("productcurrency");
-        ProductCategory productCategory = pcd.find(Integer.parseInt(req.getParameter("productcategory")));
-        Supplier supplier = sd.find(Integer.parseInt(req.getParameter("productsupplier")));
-        String active = "acive";
-        String image = "/static/img/"+req.getParameter("image");
-        Product newProduct = new Product(productname, productdescription, productprice, productcurrency, productCategory, supplier, active, image);
-        pd.add(newProduct);
-        TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
-        WebContext context = new WebContext(req, resp, req.getServletContext());
-        engine.process("product/product.html", context, resp.getWriter());
+        try{
+            String productname = req.getParameter("productname");
+            String productdescription = req.getParameter("productdescription");
+            float productprice = Float.parseFloat(req.getParameter("productprice"));
+            String productcurrency = req.getParameter("productcurrency");
+            ProductCategory productCategory = pcd.find(req.getParameter("productcategory"));
+            Supplier supplier = sd.find(req.getParameter("productsupplier"));
+            String active = "acive";
+            String image = "product_0.jpg";
+            Product newProduct = new Product(productname, productdescription, productprice, productcurrency, productCategory, supplier, active, image);
+            pd.add(newProduct);
+            String productId = String.valueOf(pd.getAll().size() + 1);
+            HttpSession session = req.getSession();
+            session.setAttribute("productid", productId);
+            message = "";
+            resp.sendRedirect("/admin/product/image");
+        } catch (NumberFormatException ex) {
+            message = "Give all data, please!";
+            resp.sendRedirect("/admin/product");
+        }
     }
 
 }

@@ -9,7 +9,7 @@ import java.util.List;
 public interface ProductDao {
 
     void add(Product product);
-    void update(int id);
+    void update(int id, String image);
     Product find(int id);
     List<Product> getAll();
     List<Product> getBy(Supplier supplier);

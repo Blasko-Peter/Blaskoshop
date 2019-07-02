@@ -54,8 +54,15 @@ public class ProductDaoMem implements ProductDao {
     }
 
     @Override
-    public void update(int id) {
-
+    public void update(int id, String image) {
+        try {
+            Class.forName("org.postgresql.Driver");
+            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
+            PreparedStatement stmt = con.prepareStatement("UPDATE products SET image = '" + image + "' WHERE id = " + id + ";");
+            stmt.execute();
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
     }
 
     @Override

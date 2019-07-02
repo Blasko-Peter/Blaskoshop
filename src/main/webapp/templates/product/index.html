@@ -20,8 +20,6 @@
                 integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
                 crossorigin="anonymous" defer></script>
 
-        <script src="/static/js/scripts.js" defer></script>
-
         <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
 
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
@@ -33,12 +31,43 @@
     </head>
     <body class="bg-light">
         <div class="container-fluid pt-3 pb-3 text-center text-light blue" id="header">
-            <h1>Blasko Shop Index</h1>
+            <h1>Blasko Shop</h1>
         </div>
-
-        <div class="container-fluid green">
+        <div class="container-fluid green" th:switch="${session.username}">
             <div class="row">
-                <div class="container">
+                <div class="container" th:case="'admin@admin.hu'">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="margin-top-16 margin-bottom-16">
+                                <form id="product" action="/admin/product" method="get">
+                                    <input type="submit" class="hundred-per-cent grey-other searchbtn" value="Product"/>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="margin-top-16 margin-bottom-16">
+                                <form id="category" action="/admin/category" method="get">
+                                    <input type="submit" class="hundred-per-cent grey-other searchbtn" value="Category"/>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="margin-top-16 margin-bottom-16">
+                                <form id="supplier" action="/admin/supplier" method="get">
+                                    <input type="submit" class="hundred-per-cent grey-other searchbtn" value="Supplier"/>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="margin-top-16 margin-bottom-16">
+                                <form id="logout" action="/logout" method="get">
+                                    <input type="submit" class="hundred-per-cent grey-other searchbtn" value="Logout"/>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container" th:case="null">
                     <div class="row">
                         <div class="col-md-8">
                         </div>
@@ -51,9 +80,21 @@
                         </div>
                     </div>
                 </div>
+                <div class="container" th:case="*">
+                    <div class="row">
+                        <div class="col-md-8">
+                        </div>
+                        <div class="col-md-4">
+                            <div class="margin-top-16 margin-bottom-16">
+                                <form action="/logout" method="get">
+                                    <input type="submit" class="hundred-per-cent grey-other searchbtn" value="Logout"/>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
         <div class="container-fluid grey">
             <div class="row">
                 <div class="container">
@@ -98,7 +139,7 @@
         <div class="container">
             <div class="row text-center margin-top-16">
                 <div class="card m-2 box" th:each="prod : ${products}">
-                    <img class="card-img-top" src="http://placehold.it/400x250/000/fff" th:attr="src='/static/img/product_' + ${prod.id} + '.jpg'" alt="" />
+                    <img class="card-img-top" src="http://placehold.it/400x250/000/fff" th:attr="src='/static/img/' + ${prod.image}" alt="" />
                     <div class="card-body">
                         <h5 class="card-title" th:text="${prod.name}">Product name</h5>
                         <p class="card-text" th:text="${prod.description}">Product description... </p>
@@ -106,14 +147,17 @@
                     <div class="card-footer text-center green text-white">
                         <h5 class="card-text" th:text="${prod.getPriceForm()}">Price</h5>
                     </div>
-                    <div class="card-footer dark-green">
-                        <a class="btn btn-block font-weight-bold addToCart dark-green text-white buy" href="#">Add to cart<i class="fas fa-shopping-cart"></i></a>
+                    <div class="card-footer dark-green" th:switch="${session.username}">
+                        <div th:case="'admin@admin.hu'">
+                        </div>
+                        <div th:case="null">
+                        </div>
+                        <div th:case="*">
+                            <a class="btn btn-block font-weight-bold addToCart dark-green text-white buy" href="#">Add to cart<i class="fas fa-shopping-cart"></i></a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div>
-            <h3 th:text="${session.username}">Ma</h3>
         </div>
 
         <div th:replace="footer.html :: copy"></div>
