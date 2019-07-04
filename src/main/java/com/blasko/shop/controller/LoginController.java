@@ -1,8 +1,13 @@
 package com.blasko.shop.controller;
 
 import com.blasko.shop.config.TemplateEngineUtil;
+import com.blasko.shop.dao.CartDao;
 import com.blasko.shop.dao.UserDao;
+import com.blasko.shop.dao.implementation.CartDaoMem;
 import com.blasko.shop.dao.implementation.UserDaoMem;
+import com.blasko.shop.model.Cart;
+import com.blasko.shop.model.Product;
+import com.blasko.shop.model.User;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
@@ -13,13 +18,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @WebServlet (urlPatterns = {"/login"})
 public class LoginController extends HttpServlet {
 
     private String message = "";
-    UserDao ud = UserDaoMem.getInstance();
     private String login = "";
+    UserDao ud = UserDaoMem.getInstance();
+    CartDao cd = CartDaoMem.getInstance();
 
 
     @Override
@@ -36,10 +45,18 @@ public class LoginController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
-        if(ud.find(email).size() > 0 && ud.checkPassword(password, ud.find(email).get(0).getPassword())){
+        List<User> user = ud.find(email);
+        if(user.size() > 0 && ud.checkPassword(password, user.get(0).getPassword())){
             login = email;
             HttpSession session = req.getSession();
             session.setAttribute("username", login);
+            session.setAttribute("userid", user.get(0).getId());
+            List<Cart> usercart = cd.findActive(user.get(0).getId());
+            if(usercart.size() == 0){
+                Map<Product, Integer> shopcart = new HashMap<>();
+                Cart newcart = new Cart(user.get(0).getId(), "active", "2019-07-05", shopcart);
+                cd.add(newcart);
+            }
             resp.sendRedirect("/");
         } else {
             message = "Invalid email or password!";

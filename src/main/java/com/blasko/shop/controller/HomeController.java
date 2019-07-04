@@ -1,12 +1,8 @@
 package com.blasko.shop.controller;
 
 import com.blasko.shop.config.TemplateEngineUtil;
-import com.blasko.shop.dao.ProductCategoryDao;
-import com.blasko.shop.dao.ProductDao;
-import com.blasko.shop.dao.SupplierDao;
-import com.blasko.shop.dao.implementation.ProductCategoryDaoMem;
-import com.blasko.shop.dao.implementation.ProductDaoMem;
-import com.blasko.shop.dao.implementation.SupplierDaoMem;
+import com.blasko.shop.dao.*;
+import com.blasko.shop.dao.implementation.*;
 import com.blasko.shop.model.Product;
 import com.blasko.shop.model.ProductCategory;
 import com.blasko.shop.model.Supplier;
@@ -26,18 +22,31 @@ public class HomeController extends HttpServlet {
     ProductCategoryDao pcd = ProductCategoryDaoMem.getInstance();
     ProductDao pd = ProductDaoMem.getInstance();
     SupplierDao sd = SupplierDaoMem.getInstance();
+    CartDao cd = CartDaoMem.getInstance();
+    UserDao ud = UserDaoMem.getInstance();
 
     private String categorySearch = "Choose...";
     private String supplierSearch = "Choose...";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
-        WebContext context = new WebContext(req, resp, req.getServletContext());
-        context.setVariable("categories", pcd.getAll());
-        context.setVariable("suppliers", sd.getAll());
-        context.setVariable("products", getActualProducts());
-        engine.process("product/index.html", context, resp.getWriter());
+        HttpSession session = req.getSession();
+        if(session.getAttribute("userid") == null){
+            TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
+            WebContext context = new WebContext(req, resp, req.getServletContext());
+            context.setVariable("categories", pcd.getAll());
+            context.setVariable("suppliers", sd.getAll());
+            context.setVariable("products", getActualProducts());
+            engine.process("product/index.html", context, resp.getWriter());
+        } else {
+            TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
+            WebContext context = new WebContext(req, resp, req.getServletContext());
+            context.setVariable("categories", pcd.getAll());
+            context.setVariable("suppliers", sd.getAll());
+            context.setVariable("products", getActualProducts());
+            context.setVariable("shopcartitems", cd.countItems((Integer) session.getAttribute("userid")));
+            engine.process("product/index.html", context, resp.getWriter());
+        }
     }
 
     @Override

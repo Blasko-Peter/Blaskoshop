@@ -46,6 +46,7 @@ public class ImageController extends HttpServlet {
                 item.write(new File("C://Users/user/Documents/Git/Blaskoshop/src/main/webapp/static/img/" + item.getName()));
                 image = item.getName();
             }
+            System.out.println("Ezek az adatok: " + productId + "/" + image);
             pd.update(productId, image);
             message = "";
             resp.sendRedirect("/admin/product");

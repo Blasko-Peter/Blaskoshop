@@ -56,7 +56,7 @@ public class ProductController extends HttpServlet {
             String image = "product_0.jpg";
             Product newProduct = new Product(productname, productdescription, productprice, productcurrency, productCategory, supplier, active, image);
             pd.add(newProduct);
-            String productId = String.valueOf(pd.getAll().size() + 1);
+            String productId = String.valueOf(pd.getAll().size());
             HttpSession session = req.getSession();
             session.setAttribute("productid", productId);
             message = "";
