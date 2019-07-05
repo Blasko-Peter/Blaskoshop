@@ -67,7 +67,19 @@ public class ProductDaoMem implements ProductDao {
 
     @Override
     public Product find(int id) {
-        return null;
+        Product product = null;
+        try {
+            Class.forName("org.postgresql.Driver");
+            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM products WHERE id = " + id);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                product = new Product(rs.getInt("id"), rs.getString("name"), rs.getString("description"), rs.getFloat("price"), rs.getString("currency"), pcd.find(rs.getInt("productcategory_id")), sd.find(rs.getInt("supplier_id")), rs.getString("active"), rs.getString("image"));
+            }
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        return product;
     }
 
     @Override

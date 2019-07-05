@@ -3,6 +3,7 @@ package com.blasko.shop.controller;
 import com.blasko.shop.config.TemplateEngineUtil;
 import com.blasko.shop.dao.*;
 import com.blasko.shop.dao.implementation.*;
+import com.blasko.shop.model.Cart;
 import com.blasko.shop.model.Product;
 import com.blasko.shop.model.ProductCategory;
 import com.blasko.shop.model.Supplier;
@@ -39,6 +40,8 @@ public class HomeController extends HttpServlet {
             context.setVariable("products", getActualProducts());
             engine.process("product/index.html", context, resp.getWriter());
         } else {
+            Cart actualShopCart = cd.findActive((Integer) session.getAttribute("userid")).get(0);
+            session.setAttribute("shopcart", actualShopCart);
             TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
             WebContext context = new WebContext(req, resp, req.getServletContext());
             context.setVariable("categories", pcd.getAll());

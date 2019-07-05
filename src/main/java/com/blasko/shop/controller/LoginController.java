@@ -53,7 +53,7 @@ public class LoginController extends HttpServlet {
             session.setAttribute("userid", user.get(0).getId());
             List<Cart> usercart = cd.findActive(user.get(0).getId());
             if(usercart.size() == 0){
-                Map<Product, Integer> shopcart = new HashMap<>();
+                Map<Integer, Integer> shopcart = new HashMap<>();
                 Cart newcart = new Cart(user.get(0).getId(), "active", "2019-07-05", shopcart);
                 cd.add(newcart);
             }

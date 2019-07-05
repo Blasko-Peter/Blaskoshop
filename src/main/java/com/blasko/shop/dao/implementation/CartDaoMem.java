@@ -3,7 +3,6 @@ package com.blasko.shop.dao.implementation;
 import com.blasko.shop.dao.CartDao;
 import com.blasko.shop.dao.ProductDao;
 import com.blasko.shop.model.Cart;
-import com.blasko.shop.model.Product;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,8 +16,8 @@ import java.util.Map;
 public class CartDaoMem implements CartDao {
 
     private List<Cart> data;
-    private Map<Product, Integer> shopcart;
-    private List<Product> products;
+    private Map<Integer, Integer> shopcart;
+    private List<Integer> products;
     private List<Integer> integers;
     private static CartDaoMem instance = null;
     ProductDao pd = ProductDaoMem.getInstance();
@@ -57,21 +56,21 @@ public class CartDaoMem implements CartDao {
                 shopcart = new HashMap<>();
                 products = new ArrayList<>();
                 integers = new ArrayList<>();
-                products.add(pd.find(rs.getInt("product01")));
-                products.add(pd.find(rs.getInt("product02")));
-                products.add(pd.find(rs.getInt("product03")));
-                products.add(pd.find(rs.getInt("product04")));
-                products.add(pd.find(rs.getInt("product05")));
-                products.add(pd.find(rs.getInt("product06")));
-                products.add(pd.find(rs.getInt("product07")));
-                products.add(pd.find(rs.getInt("product08")));
-                products.add(pd.find(rs.getInt("product09")));
-                products.add(pd.find(rs.getInt("product10")));
-                products.add(pd.find(rs.getInt("product11")));
-                products.add(pd.find(rs.getInt("product12")));
-                products.add(pd.find(rs.getInt("product13")));
-                products.add(pd.find(rs.getInt("product14")));
-                products.add(pd.find(rs.getInt("product15")));
+                products.add(rs.getInt("product01"));
+                products.add(rs.getInt("product02"));
+                products.add(rs.getInt("product03"));
+                products.add(rs.getInt("product04"));
+                products.add(rs.getInt("product05"));
+                products.add(rs.getInt("product06"));
+                products.add(rs.getInt("product07"));
+                products.add(rs.getInt("product08"));
+                products.add(rs.getInt("product09"));
+                products.add(rs.getInt("product10"));
+                products.add(rs.getInt("product11"));
+                products.add(rs.getInt("product12"));
+                products.add(rs.getInt("product13"));
+                products.add(rs.getInt("product14"));
+                products.add(rs.getInt("product15"));
                 integers.add(rs.getInt("product16"));
                 integers.add(rs.getInt("product17"));
                 integers.add(rs.getInt("product18"));
@@ -88,7 +87,11 @@ public class CartDaoMem implements CartDao {
                 integers.add(rs.getInt("product29"));
                 integers.add(rs.getInt("product30"));
                 for(int i = 0; i < products.size(); i++){
-                    shopcart.put(products.get(i), integers.get(i));
+                    if(products.get(i) == 0){
+                        continue;
+                    } else {
+                        shopcart.put(products.get(i), integers.get(i));
+                    }
                 }
                 Cart newCart = new Cart(rs.getInt("id"), rs.getInt("user_id"), rs.getString("active"), rs.getString("historydate"), shopcart);
                 data.add(newCart);
@@ -147,21 +150,21 @@ public class CartDaoMem implements CartDao {
                 shopcart = new HashMap<>();
                 products = new ArrayList<>();
                 integers = new ArrayList<>();
-                products.add(pd.find(rs.getInt("product01")));
-                products.add(pd.find(rs.getInt("product02")));
-                products.add(pd.find(rs.getInt("product03")));
-                products.add(pd.find(rs.getInt("product04")));
-                products.add(pd.find(rs.getInt("product05")));
-                products.add(pd.find(rs.getInt("product06")));
-                products.add(pd.find(rs.getInt("product07")));
-                products.add(pd.find(rs.getInt("product08")));
-                products.add(pd.find(rs.getInt("product09")));
-                products.add(pd.find(rs.getInt("product10")));
-                products.add(pd.find(rs.getInt("product11")));
-                products.add(pd.find(rs.getInt("product12")));
-                products.add(pd.find(rs.getInt("product13")));
-                products.add(pd.find(rs.getInt("product14")));
-                products.add(pd.find(rs.getInt("product15")));
+                products.add(rs.getInt("product01"));
+                products.add(rs.getInt("product02"));
+                products.add(rs.getInt("product03"));
+                products.add(rs.getInt("product04"));
+                products.add(rs.getInt("product05"));
+                products.add(rs.getInt("product06"));
+                products.add(rs.getInt("product07"));
+                products.add(rs.getInt("product08"));
+                products.add(rs.getInt("product09"));
+                products.add(rs.getInt("product10"));
+                products.add(rs.getInt("product11"));
+                products.add(rs.getInt("product12"));
+                products.add(rs.getInt("product13"));
+                products.add(rs.getInt("product14"));
+                products.add(rs.getInt("product15"));
                 integers.add(rs.getInt("product16"));
                 integers.add(rs.getInt("product17"));
                 integers.add(rs.getInt("product18"));
