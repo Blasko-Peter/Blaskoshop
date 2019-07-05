@@ -54,6 +54,7 @@ public class HomeController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
         categorySearch = req.getParameter("categorysearch");
         supplierSearch = req.getParameter("suppliersearch");
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
@@ -61,6 +62,7 @@ public class HomeController extends HttpServlet {
         context.setVariable("categories", pcd.getAll());
         context.setVariable("suppliers", sd.getAll());
         context.setVariable("products", getActualProducts());
+        context.setVariable("shopcartitems", cd.countItems((Integer) session.getAttribute("userid")));
         engine.process("product/index.html", context, resp.getWriter());
     }
 

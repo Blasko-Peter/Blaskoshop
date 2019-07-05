@@ -3,6 +3,7 @@ package com.blasko.shop.dao.implementation;
 import com.blasko.shop.dao.CartDao;
 import com.blasko.shop.dao.ProductDao;
 import com.blasko.shop.model.Cart;
+import com.blasko.shop.model.Product;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -190,6 +191,37 @@ public class CartDaoMem implements CartDao {
             System.out.println(ex);
         }
         return data;
+    }
+
+    @Override
+    public void updateCart(Cart cart) {
+        int[] keys = new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+        int[] values = new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+        int index = 0;
+        for(Integer key : cart.getShopcart().keySet()){
+            keys[index] = key;
+            values[index] = cart.getShopcart().get(key);
+            index++;
+        }
+        try {
+            Class.forName("org.postgresql.Driver");
+            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
+            PreparedStatement stmt = con.prepareStatement("UPDATE carts SET product01 = " + keys[0] + ", product02 = " + keys[1] + ", product03 = " + keys[2] + ", product04 = " + keys[3] + ", product05 = " + keys[4] + ", product06 = " + keys[5] + ", product07 = " + keys[6] + ", product08 = " + keys[7] + ", product09 = " + keys[8] + ", product10 = " + keys[9] + ", product11 = " + keys[10] + ", product12 = " + keys[11] + ", product13 = " + keys[12] + ", product14 = " + keys[13] + ", product15 = " + keys[14] + ", product16 = " + values[0] + ", product17 = " + values[1] + ", product18 = " + values[2] + ", product19 = " + values[3] + ", product20 = " + values[4] + ", product21 = " + values[5] + ", product22 = " + values[6] + ", product23 = " + values[7] + ", product24 = " + values[8] + ", product25 = " + values[9] + ", product26 = " + values[10] + ", product27 = " + values[11] + ", product28 = " + values[12] + ", product29 = " + values[13] + ", product30 = " + values[14] + "  WHERE id = " + cart.getId() + ";");
+            stmt.execute();
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
+    @Override
+    public Map<Product, Integer> mapConverter(Map<Integer, Integer> shopcart) {
+        Map<Product, Integer> products = new HashMap<>();
+        for(Integer key : shopcart.keySet()){
+            Product product = pd.find(key);
+            int value = shopcart.get(key);
+            products.put(product, value);
+        }
+        return products;
     }
 
 }
