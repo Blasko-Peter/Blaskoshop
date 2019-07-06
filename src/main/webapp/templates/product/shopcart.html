@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
           integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="/static/css/style.css" />
+    <script type="text/javascript" th:src="@{/static/js/shopcartjs.js}" defer></script>
 </head>
 <body class="bg-light">
     <div th:if="${session.username} != null">
@@ -56,9 +57,12 @@
                                 </tr>
                                 <tr th:each="product : ${products}">
                                     <td th:text="${product.key.getName()}">Product Name</td>
-                                    <td th:text="${product.key.getPriceForm()}">Product Price</td>
-                                    <td th:text="${product.value}">Product Value</td>
-                                    <td th:text="${product.key.getPrice()} * ${product.value} * 1.0 + ' USD'">All Price</td>
+                                    <td th:id="itemprice + ${product.key.getId()}" th:text="${product.key.getPriceForm()}">Product Price</td>
+                                    <td><button th:id="${product.key.getId()}" class="minusButtonSC">-</button></td>
+                                    <td th:text="${product.value}" th:id="itemsvalue + ${product.key.getId()}">Product Value</td>
+                                    <td><button th:id="${product.key.getId()}" class="addButtonSC">+</button></td>
+                                    <td th:id="itemallprice + ${product.key.getId()}" th:text="${product.key.getPrice()} * ${product.value} * 1.0 + ' USD'">All Price</td>
+                                    <td><button th:id="${product.key.getId()}" class="deleteButton">Delete</button></td>
                                 </tr>
                             </table>
                         </div>

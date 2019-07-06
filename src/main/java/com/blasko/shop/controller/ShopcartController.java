@@ -34,4 +34,21 @@ public class ShopcartController extends HttpServlet {
         engine.process("product/shopcart.html", context, resp.getWriter());
     }
 
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        Cart actualShopCart = (Cart) session.getAttribute("shopcart");
+        String itemId = req.getParameter("id");
+        String number = req.getParameter("number");
+        if(Integer.parseInt(number) > 0){
+            int newNumber = Integer.parseInt(number);
+            actualShopCart.getShopcart().put(Integer.parseInt(itemId), newNumber);
+        } else {
+            actualShopCart.getShopcart().remove(Integer.parseInt(itemId));
+        }
+        cd.updateCart(actualShopCart);
+        Cart newCart = cd.findActive((Integer) session.getAttribute("userid")).get(0);
+        session.setAttribute("shopcart", newCart);
+    }
+
 }
