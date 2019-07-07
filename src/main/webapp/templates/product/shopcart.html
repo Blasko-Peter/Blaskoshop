@@ -48,23 +48,40 @@
                 <div class="div-form hundred-per-cent">
                     <div class="form-side">
                         <div class="input-group">
-                            <table>
+                            <table class="hundred-per-cent input-field">
                                 <tr>
-                                    <th>Product Name</th>
-                                    <th>Product Price</th>
-                                    <th>Product Quantity</th>
-                                    <th>Full Price</th>
+                                    <th class="margin-top-16 margin-bottom-16">Product Name</th>
+                                    <th class="center margin-top-16 margin-bottom-16">Product Price</th>
+                                    <th class="itemsnumber margin-top-16 margin-bottom-16"></th>
+                                    <th class="center margin-top-16 margin-bottom-16">Product Quantity</th>
+                                    <th class="itemsnumber margin-top-16 margin-bottom-16"></th>
+                                    <th class="center margin-top-16 margin-bottom-16">Full Price</th>
+                                    <th class="hundered-per-cent margin-top-16 margin-bottom-16"></th>
                                 </tr>
                                 <tr th:each="product : ${products}">
-                                    <td th:text="${product.key.getName()}">Product Name</td>
-                                    <td th:id="itemprice + ${product.key.getId()}" th:text="${product.key.getPriceForm()}">Product Price</td>
-                                    <td><button th:id="${product.key.getId()}" class="minusButtonSC">-</button></td>
-                                    <td th:text="${product.value}" th:id="itemsvalue + ${product.key.getId()}">Product Value</td>
-                                    <td><button th:id="${product.key.getId()}" class="addButtonSC">+</button></td>
-                                    <td th:id="itemallprice + ${product.key.getId()}" th:text="${product.key.getPrice()} * ${product.value} * 1.0 + ' USD'">All Price</td>
-                                    <td><button th:id="${product.key.getId()}" class="deleteButton">Delete</button></td>
+                                    <td class="margin-top-16 margin-bottom-16" th:text="${product.key.getName()}">Product Name</td>
+                                    <td th:id="itemprice + ${product.key.getId()}" class="center margin-top-16 margin-bottom-16" th:text="${product.key.getPriceForm()}">Product Price</td>
+                                    <td><button th:id="${product.key.getId()}" class="minusButtonSC itemsnumber grey-other searchbtn margin-top-16 margin-bottom-16">-</button></td>
+                                    <td th:text="${product.value}" th:id="itemsvalue + ${product.key.getId()}" class="center margin-top-16 margin-bottom-16">Product Value</td>
+                                    <td><button th:id="${product.key.getId()}" class="addButtonSC itemsnumber grey-other searchbtn margin-top-16 margin-bottom-16">+</button></td>
+                                    <td th:id="itemallprice + ${product.key.getId()}" class="center margin-top-16 margin-bottom-16" th:text="${product.key.getPrice()} * ${product.value} * 1.0 + ' USD'">All Price</td>
+                                    <td><button th:id="${product.key.getId()}" class="deleteButton hundred-per-cent grey-other searchbtn margin-top-16 margin-bottom-16">Delete</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="margin-top-16 margin-bottom-16"></td>
+                                    <td class="margin-top-16 margin-bottom-16"></td>
+                                    <td class="margin-top-16 margin-bottom-16"></td>
+                                    <td><h6 class="center margin-top-16 margin-bottom-16">Total Price:</h6></td>
+                                    <td class="margin-top-16 margin-bottom-16"></td>
+                                    <td><h6 id="totalprice" class="center margin-top-16 margin-bottom-16" th:text="${totalprice} * 1.0 + ' USD'">Price</h6></td>
+                                    <td class="margin-top-16 margin-bottom-16"></td>
                                 </tr>
                             </table>
+                        </div>
+                        <div>
+                            <form action="/" method="get">
+                                <input type="submit" class="hundred-per-cent grey-other searchbtn input-field" value="Offer"/>
+                            </form>
                         </div>
                     </div>
                 </div>

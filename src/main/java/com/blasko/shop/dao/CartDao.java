@@ -15,5 +15,6 @@ public interface CartDao {
     List<Cart> getAll();
     void updateCart(Cart cart);
     Map<Product, Integer> mapConverter(Map<Integer, Integer> shopcart);
+    int getTotalPrice(Map<Product, Integer> products);
 
 }

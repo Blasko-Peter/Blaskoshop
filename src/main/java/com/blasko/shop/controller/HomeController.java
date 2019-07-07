@@ -57,13 +57,22 @@ public class HomeController extends HttpServlet {
         HttpSession session = req.getSession();
         categorySearch = req.getParameter("categorysearch");
         supplierSearch = req.getParameter("suppliersearch");
-        TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
-        WebContext context = new WebContext(req, resp, req.getServletContext());
-        context.setVariable("categories", pcd.getAll());
-        context.setVariable("suppliers", sd.getAll());
-        context.setVariable("products", getActualProducts());
-        context.setVariable("shopcartitems", cd.countItems((Integer) session.getAttribute("userid")));
-        engine.process("product/index.html", context, resp.getWriter());
+        if(session.getAttribute("userid") == null){
+            TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
+            WebContext context = new WebContext(req, resp, req.getServletContext());
+            context.setVariable("categories", pcd.getAll());
+            context.setVariable("suppliers", sd.getAll());
+            context.setVariable("products", getActualProducts());
+            engine.process("product/index.html", context, resp.getWriter());
+        } else {
+            TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
+            WebContext context = new WebContext(req, resp, req.getServletContext());
+            context.setVariable("categories", pcd.getAll());
+            context.setVariable("suppliers", sd.getAll());
+            context.setVariable("products", getActualProducts());
+            context.setVariable("shopcartitems", cd.countItems((Integer) session.getAttribute("userid")));
+            engine.process("product/index.html", context, resp.getWriter());
+        }
     }
 
     private List<Product> getActualProducts(){

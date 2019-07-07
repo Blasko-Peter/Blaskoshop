@@ -31,6 +31,7 @@ public class ShopcartController extends HttpServlet {
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
         context.setVariable("products", products);
+        context.setVariable("totalprice", cd.getTotalPrice(products));
         engine.process("product/shopcart.html", context, resp.getWriter());
     }
 

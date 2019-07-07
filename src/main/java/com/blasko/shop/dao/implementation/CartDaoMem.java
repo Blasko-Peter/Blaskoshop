@@ -224,4 +224,16 @@ public class CartDaoMem implements CartDao {
         return products;
     }
 
+    @Override
+    public int getTotalPrice(Map<Product, Integer> products) {
+        int totalPrice = 0;
+        for(Product product : products.keySet()){
+            int productPrice = (int) product.getPrice();
+            int quantity = products.get(product);
+            totalPrice += (productPrice * quantity);
+        }
+        return totalPrice;
+    }
+
+
 }
