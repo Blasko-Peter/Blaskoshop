@@ -19,12 +19,11 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
           integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="/static/css/style.css" />
-    <script type="text/javascript" th:src="@{/static/js/shopcartjs.js}" defer></script>
 </head>
 <body class="bg-light">
     <div th:if="${session.username} != null">
         <div class="container-fluid pt-3 pb-3 text-center text-light blue" id="header">
-            <h1>Blasko Shop Offer</h1>
+            <h1>Blasko Shop Order</h1>
         </div>
         <div class="container-fluid green">
             <div class="row">
@@ -35,7 +34,7 @@
                         <div class="col-md-3">
                             <div class="margin-top-16 margin-bottom-16">
                                 <form action="/shopcart" method="get">
-                                    <input type="submit" class="hundred-per-cent grey-other searchbtn" value="Shopcart"/>
+                                    <input type="submit" class="hundred-per-cent grey-other searchbtn" value="shopcart"/>
                                 </form>
                             </div>
                         </div>
@@ -45,11 +44,55 @@
         </div>
         <div class="container">
             <div class="row">
-                <div class="col-6">
-
+                <div class="col-md-12 col-lg-6 div-form hundred-per-cent">
+                    <form class="form-side-order" action="/order" method="post">
+                        <div class="input-group">
+                            <div class="input-group-prepend max-igp-order">
+                                <span class="input-group-text input-header input-field">First Name</span>
+                            </div>
+                            <input type="text" class="form-control input-field" name="firstName" width="100">
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-prepend max-igp-order">
+                                <span class="input-group-text input-header input-field">Last Name</span>
+                            </div>
+                            <input type="text" class="form-control input-field" name="lastName" width="100">
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-prepend max-igp-order">
+                                <span class="input-group-text input-header input-field">Address</span>
+                            </div>
+                            <input type="text" class="form-control input-field" name="address" width="100">
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-prepend max-igp-order">
+                                <span class="input-group-text input-header input-field">Postalcode</span>
+                            </div>
+                            <input type="text" class="form-control input-field" name="postalCode" width="100">
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-prepend max-igp-order">
+                                <span class="input-group-text input-header input-field">City</span>
+                            </div>
+                            <input type="text" class="form-control input-field" name="city" width="100">
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-prepend max-igp-order">
+                                <span class="input-group-text input-header input-field">Country</span>
+                            </div>
+                            <input type="text" class="form-control input-field" name="country" width="100">
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-prepend max-igp-order">
+                                <span class="input-group-text input-header input-field">Phone Number</span>
+                            </div>
+                            <input type="text" class="form-control input-field" name="phoneNumber" width="100">
+                        </div>
+                        <input class="hundred-per-cent grey-other searchbtn input-field" type="submit" value="Order"/>
+                    </form>
                 </div>
-                <div class="col-6">
-                    <div class="div-form hundred-per-cent">
+                <div class="col-md-12 col-lg-6 div-form hundred-per-cent">
+                    <div>
                         <div>
                             <div class="input-group">
                                 <table class="hundred-per-cent input-field form-side-6">

@@ -28,10 +28,11 @@ public class ShopcartController extends HttpServlet {
         HttpSession session = req.getSession();
         Cart actualShopCart = (Cart) session.getAttribute("shopcart");
         Map<Product, Integer> products = cd.mapConverter(actualShopCart.getShopcart());
+        int totalPrice = cd.getTotalPrice(products);
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
         context.setVariable("products", products);
-        context.setVariable("totalprice", cd.getTotalPrice(products));
+        context.setVariable("totalprice", totalPrice);
         engine.process("product/shopcart.html", context, resp.getWriter());
     }
 
