@@ -1,10 +1,13 @@
 package com.blasko.shop.controller;
 
 import com.blasko.shop.config.TemplateEngineUtil;
+import com.blasko.shop.dao.AddressDao;
 import com.blasko.shop.dao.CartDao;
 import com.blasko.shop.dao.UserDao;
+import com.blasko.shop.dao.implementation.AddressDaoMem;
 import com.blasko.shop.dao.implementation.CartDaoMem;
 import com.blasko.shop.dao.implementation.UserDaoMem;
+import com.blasko.shop.model.Address;
 import com.blasko.shop.model.Cart;
 import com.blasko.shop.model.Product;
 import com.blasko.shop.model.User;
@@ -32,6 +35,7 @@ public class LoginController extends HttpServlet {
     UserDao ud = UserDaoMem.getInstance();
     CartDao cd = CartDaoMem.getInstance();
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH.mm.ss");
+    AddressDao ad = AddressDaoMem.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -55,10 +59,11 @@ public class LoginController extends HttpServlet {
             session.setAttribute("userid", user.get(0).getId());
             List<Cart> usercart = cd.findActive(user.get(0).getId());
             if(usercart.size() == 0){
-                Map<Integer, Integer> shopcart = new HashMap<>();
+                Map<Product, Integer> shopcart = new HashMap<>();
                 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
                 String historydate = sdf.format(timestamp);
-                Cart newcart = new Cart(user.get(0).getId(), "active", historydate, shopcart, 1);
+                Address actualAddress = ad.getAddress(1);
+                Cart newcart = new Cart(user.get(0).getId(), "active", historydate, shopcart, actualAddress, 0);
                 cd.add(newcart);
             }
             resp.sendRedirect("/");

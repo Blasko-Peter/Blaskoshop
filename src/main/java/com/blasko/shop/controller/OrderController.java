@@ -23,6 +23,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,12 +47,8 @@ public class OrderController extends HttpServlet {
             engine.process("product/order.html", context, resp.getWriter());
         } else {
             message = "";
-            Cart actualShopCart = (Cart) session.getAttribute("shopcart");
-            Map<Product, Integer> products = cd.mapConverter(actualShopCart.getShopcart());
             TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
             WebContext context = new WebContext(req, resp, req.getServletContext());
-            context.setVariable("products", products);
-            context.setVariable("totalprice", cd.getTotalPrice(products));
             context.setVariable("message", message);
             engine.process("product/order.html", context, resp.getWriter());
         }
@@ -70,12 +67,8 @@ public class OrderController extends HttpServlet {
         String phoneNumber = req.getParameter("phoneNumber");
         if(firstName.equals("") || lastName.equals("") || address.equals("") || postalCode.equals("") || city.equals("") || country.equals("") || phoneNumber.equals("")){
             message = "Give all data, please!";
-            Cart actualShopCart = (Cart) session.getAttribute("shopcart");
-            Map<Product, Integer> products = cd.mapConverter(actualShopCart.getShopcart());
             TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
             WebContext context = new WebContext(req, resp, req.getServletContext());
-            context.setVariable("products", products);
-            context.setVariable("totalprice", cd.getTotalPrice(products));
             context.setVariable("message", message);
             engine.process("product/order.html", context, resp.getWriter());
         } else {
@@ -94,10 +87,11 @@ public class OrderController extends HttpServlet {
             Cart actualShopCart = (Cart) session.getAttribute("shopcart");
             int actualShopCartId = actualShopCart.getId();
             cd.closeCartById(actualShopCartId, actualAddressId);
-            Map<Integer, Integer> shopcart = new HashMap<>();
+            Map<Product, Integer> shopcart = new HashMap<>();
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
             String historydate = sdf.format(timestamp);
-            Cart newcart = new Cart(userId, "active", historydate, shopcart, 1);
+            Address actualAddress = ad.getAddress(1);
+            Cart newcart = new Cart(userId, "active", historydate, shopcart, actualAddress, 0);
             cd.add(newcart);
             resp.sendRedirect("/end");
         }

@@ -3,7 +3,9 @@ package com.blasko.shop.controller;
 import com.blasko.shop.config.TemplateEngineUtil;
 
 import com.blasko.shop.dao.CartDao;
+import com.blasko.shop.dao.ProductDao;
 import com.blasko.shop.dao.implementation.CartDaoMem;
+import com.blasko.shop.dao.implementation.ProductDaoMem;
 import com.blasko.shop.model.Cart;
 import com.blasko.shop.model.Product;
 import org.thymeleaf.TemplateEngine;
@@ -22,6 +24,7 @@ import java.util.Map;
 public class ShopcartController extends HttpServlet {
 
     CartDao cd = CartDaoMem.getInstance();
+    ProductDao pd = ProductDaoMem.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -31,13 +34,8 @@ public class ShopcartController extends HttpServlet {
             WebContext context = new WebContext(req, resp, req.getServletContext());
             engine.process("product/shopcart.html", context, resp.getWriter());
         } else {
-            Cart actualShopCart = (Cart) session.getAttribute("shopcart");
-            Map<Product, Integer> products = cd.mapConverter(actualShopCart.getShopcart());
-            int totalPrice = cd.getTotalPrice(products);
             TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
             WebContext context = new WebContext(req, resp, req.getServletContext());
-            context.setVariable("products", products);
-            context.setVariable("totalprice", totalPrice);
             engine.process("product/shopcart.html", context, resp.getWriter());
         }
     }
@@ -48,11 +46,12 @@ public class ShopcartController extends HttpServlet {
         Cart actualShopCart = (Cart) session.getAttribute("shopcart");
         String itemId = req.getParameter("id");
         String number = req.getParameter("number");
+        Product product = pd.find(Integer.parseInt(itemId));
         if(Integer.parseInt(number) > 0){
             int newNumber = Integer.parseInt(number);
-            actualShopCart.getShopcart().put(Integer.parseInt(itemId), newNumber);
+            actualShopCart.getShopcart().put(product, newNumber);
         } else {
-            actualShopCart.getShopcart().remove(Integer.parseInt(itemId));
+            actualShopCart.getShopcart().remove(product);
         }
         cd.updateCart(actualShopCart);
         Cart newCart = cd.findActive((Integer) session.getAttribute("userid")).get(0);

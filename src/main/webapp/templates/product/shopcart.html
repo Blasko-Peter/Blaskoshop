@@ -58,7 +58,7 @@
                                     <th class="center margin-top-16 margin-bottom-16">Full Price</th>
                                     <th class="hundered-per-cent margin-top-16 margin-bottom-16"></th>
                                 </tr>
-                                <tr th:each="product : ${products}">
+                                <tr th:each="product : ${session.shopcart.getShopcart()}">
                                     <td class="margin-top-16 margin-bottom-16" th:text="${product.key.getName()}">Product Name</td>
                                     <td th:id="itemprice + ${product.key.getId()}" class="center margin-top-16 margin-bottom-16" th:text="${product.key.getPriceForm()}">Product Price</td>
                                     <td><button th:id="${product.key.getId()}" class="minusButtonSC itemsnumber grey-other searchbtn margin-top-16 margin-bottom-16">-</button></td>
@@ -73,7 +73,7 @@
                                     <td class="margin-top-16 margin-bottom-16"></td>
                                     <td><h6 class="center margin-top-16 margin-bottom-16">Total Price:</h6></td>
                                     <td class="margin-top-16 margin-bottom-16"></td>
-                                    <td><h6 id="totalprice" class="center margin-top-16 margin-bottom-16" th:text="${totalprice} * 1.0 + ' USD'">Price</h6></td>
+                                    <td><h6 id="totalprice" class="center margin-top-16 margin-bottom-16" th:text="${session.shopcart.getTotalPrice()} * 1.0 + ' USD'">Price</h6></td>
                                     <td class="margin-top-16 margin-bottom-16"></td>
                                 </tr>
                             </table>

@@ -11,27 +11,30 @@ public class Cart {
     private int user_id;
     private String active;
     private String historydate;
-    private Map<Integer, Integer> shopcart;
-    private int address_id;
+    private Map<Product, Integer> shopcart;
+    private Address address;
+    private int totalPrice;
 
     CartDao cd = CartDaoMem.getInstance();
 
-    public Cart(int user_id, String active, String historydate, Map<Integer, Integer> shopcart, int address_id) {
+    public Cart(int user_id, String active, String historydate, Map<Product, Integer> shopcart, Address address, int totalPrice) {
         this.id = cd.getAll().size() + 1;
         this.user_id = user_id;
         this.active = active;
         this.historydate = historydate;
         this.shopcart = shopcart;
-        this.address_id = address_id;
+        this.address = address;
+        this.totalPrice = totalPrice;
     }
 
-    public Cart(int id, int user_id, String active, String historydate, Map<Integer, Integer> shopcart, int address_id) {
+    public Cart(int id, int user_id, String active, String historydate, Map<Product, Integer> shopcart, Address address, int totalPrice){
         this.id = id;
         this.user_id = user_id;
         this.active = active;
         this.historydate = historydate;
         this.shopcart = shopcart;
-        this.address_id = address_id;
+        this.address = address;
+        this.totalPrice = totalPrice;
     }
 
     public int getId() {
@@ -66,20 +69,28 @@ public class Cart {
         this.historydate = historydate;
     }
 
-    public Map<Integer, Integer> getShopcart() {
+    public Map<Product, Integer> getShopcart() {
         return shopcart;
     }
 
-    public void setShopcart(Map<Integer, Integer> shopcart) {
+    public void setShopcart(Map<Product, Integer> shopcart) {
         this.shopcart = shopcart;
     }
 
-    public int getAddress_id() {
-        return address_id;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setAddress_id(int address_id) {
-        this.address_id = address_id;
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public int getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(int totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
 }

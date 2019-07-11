@@ -16,6 +16,7 @@ import java.util.List;
 
 public class AddressDaoMem implements AddressDao {
 
+    private Address address;
     private List<Address> data;
     private static AddressDaoMem instance = null;
     UserDao ud = UserDaoMem.getInstance();
@@ -99,6 +100,23 @@ public class AddressDaoMem implements AddressDao {
             }
         }
         return address_id;
+    }
+
+    @Override
+    public Address getAddress(int address_id) {
+        try {
+            Class.forName("org.postgresql.Driver");
+            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM addresses WHERE id = " + address_id + ";");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                address = new Address(rs.getInt("id"), rs.getString("firstname"), rs.getString("lastname"), rs.getString("address"), rs.getString("postalcode"), rs.getString("city"), rs.getString("country"), rs.getString("phonenumber"), ud.find(rs.getInt("user_id")).get(0));
+            }
+            con.close();
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        return address;
     }
 
 }

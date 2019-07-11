@@ -104,7 +104,7 @@
                                         <th class="center margin-top-16 margin-bottom-16">Quantity</th>
                                         <th class="center margin-top-16 margin-bottom-16">Full Price</th>
                                     </tr>
-                                    <tr th:each="product : ${products}">
+                                    <tr th:each="product : ${session.shopcart.getShopcart()}">
                                         <td class="margin-top-16 margin-bottom-16" th:text="${product.key.getName()}">Product Name</td>
                                         <td th:text="${product.value}" th:id="itemsvalue + ${product.key.getId()}" class="center margin-top-16 margin-bottom-16">Product Value</td>
                                         <td th:id="itemallprice + ${product.key.getId()}" class="center margin-top-16 margin-bottom-16" th:text="${product.key.getPrice()} * ${product.value} * 1.0 + ' USD'">All Price</td>
@@ -112,7 +112,7 @@
                                     <tr>
                                         <td class="margin-top-16 margin-bottom-16"></td>
                                         <td><h6 class="center margin-top-16 margin-bottom-16">Total Price:</h6></td>
-                                        <td><h6 id="totalprice" class="center margin-top-16 margin-bottom-16" th:text="${totalprice} * 1.0 + ' USD'">Price</h6></td>
+                                        <td><h6 id="totalprice" class="center margin-top-16 margin-bottom-16" th:text="${session.shopcart.totalprice} * 1.0 + ' USD'">Price</h6></td>
                                     </tr>
                                 </table>
                             </div>
