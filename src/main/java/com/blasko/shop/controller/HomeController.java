@@ -42,6 +42,8 @@ public class HomeController extends HttpServlet {
         } else {
             Cart actualShopCart = cd.findActive((Integer) session.getAttribute("userid")).get(0);
             session.setAttribute("shopcart", actualShopCart);
+            int histories = cd.findAll((Integer) session.getAttribute("userid")).size();
+            session.setAttribute("histories", histories);
             TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
             WebContext context = new WebContext(req, resp, req.getServletContext());
             context.setVariable("categories", pcd.getAll());

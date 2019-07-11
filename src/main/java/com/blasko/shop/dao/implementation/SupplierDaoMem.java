@@ -35,6 +35,7 @@ public class SupplierDaoMem implements SupplierDao{
             Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
             PreparedStatement stmt = con.prepareStatement("INSERT INTO suppliers values('"+supplierId+"','"+supplierName+"','"+supplierDescription+"')");
             stmt.execute();
+            con.close();
         } catch (Exception ex) {
             System.out.println(ex);
         }
@@ -56,6 +57,7 @@ public class SupplierDaoMem implements SupplierDao{
             while (rs.next()){
                 supplier = new Supplier(rs.getInt("id"), rs.getString("name"), rs.getString("description"));
             }
+            con.close();
         } catch (Exception ex) {
             System.out.println(ex);
         }
@@ -73,6 +75,7 @@ public class SupplierDaoMem implements SupplierDao{
             while (rs.next()){
                 supplier = new Supplier(rs.getInt("id"), rs.getString("name"), rs.getString("description"));
             }
+            con.close();
         } catch (Exception ex) {
             System.out.println(ex);
         }
@@ -91,7 +94,7 @@ public class SupplierDaoMem implements SupplierDao{
                 Supplier newSupplier = new Supplier(rs.getInt("id"), rs.getString("name"), rs.getString("description"));
                 data.add(newSupplier);
             }
-
+            con.close();
         } catch (Exception ex) {
             System.out.println(ex);
         }

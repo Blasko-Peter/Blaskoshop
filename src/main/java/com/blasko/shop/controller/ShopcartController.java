@@ -26,14 +26,20 @@ public class ShopcartController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        Cart actualShopCart = (Cart) session.getAttribute("shopcart");
-        Map<Product, Integer> products = cd.mapConverter(actualShopCart.getShopcart());
-        int totalPrice = cd.getTotalPrice(products);
-        TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
-        WebContext context = new WebContext(req, resp, req.getServletContext());
-        context.setVariable("products", products);
-        context.setVariable("totalprice", totalPrice);
-        engine.process("product/shopcart.html", context, resp.getWriter());
+        if(session.getAttribute("userid") == null){
+            TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
+            WebContext context = new WebContext(req, resp, req.getServletContext());
+            engine.process("product/shopcart.html", context, resp.getWriter());
+        } else {
+            Cart actualShopCart = (Cart) session.getAttribute("shopcart");
+            Map<Product, Integer> products = cd.mapConverter(actualShopCart.getShopcart());
+            int totalPrice = cd.getTotalPrice(products);
+            TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
+            WebContext context = new WebContext(req, resp, req.getServletContext());
+            context.setVariable("products", products);
+            context.setVariable("totalprice", totalPrice);
+            engine.process("product/shopcart.html", context, resp.getWriter());
+        }
     }
 
     @Override

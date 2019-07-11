@@ -37,6 +37,7 @@ public class ProductCategoryDaoMem implements ProductCategoryDao {
             Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
             PreparedStatement stmt = con.prepareStatement("INSERT INTO productcategories (id, name, description, department) values('"+categoryId+"','"+categoryName+"','"+categoryDescription+"','"+categoryDepartment+"')");
             stmt.execute();
+            con.close();
         } catch (Exception ex) {
             System.out.println(ex);
         }
@@ -58,6 +59,7 @@ public class ProductCategoryDaoMem implements ProductCategoryDao {
             while (rs.next()){
                 pc = new ProductCategory(rs.getInt("id"), rs.getString("name"), rs.getString("description"), rs.getString("department"));
             }
+            con.close();
         } catch (Exception ex) {
             System.out.println(ex);
         }
@@ -75,6 +77,7 @@ public class ProductCategoryDaoMem implements ProductCategoryDao {
             while (rs.next()){
                 pc = new ProductCategory(rs.getInt("id"), rs.getString("name"), rs.getString("description"), rs.getString("department"));
             }
+            con.close();
         } catch (Exception ex) {
             System.out.println(ex);
         }
@@ -93,6 +96,7 @@ public class ProductCategoryDaoMem implements ProductCategoryDao {
                 ProductCategory newProductCategory = new ProductCategory(rs.getInt("id"), rs.getString("name"), rs.getString("description"), rs.getString("department"));
                 data.add(newProductCategory);
             }
+            con.close();
         } catch (Exception ex) {
             System.out.println(ex);
         }

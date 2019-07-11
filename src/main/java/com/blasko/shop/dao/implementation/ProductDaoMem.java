@@ -48,6 +48,7 @@ public class ProductDaoMem implements ProductDao {
             Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
             PreparedStatement stmt = con.prepareStatement("INSERT INTO products (id, name, description, price, currency, productcategory_id, supplier_id, active, image) values('"+productId+"','"+productName+"','"+productDescription+"','"+productPrice+"','"+productCurrency+"','"+productCategory+"','"+productSupplier+"','"+productActive+"','"+productImage+"')");
             stmt.execute();
+            con.close();
         } catch (Exception ex) {
             System.out.println(ex);
         }
@@ -60,6 +61,7 @@ public class ProductDaoMem implements ProductDao {
             Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
             PreparedStatement stmt = con.prepareStatement("UPDATE products SET image = '" + image + "' WHERE id = " + id + ";");
             stmt.execute();
+            con.close();
         } catch (Exception ex) {
             System.out.println(ex);
         }
@@ -76,6 +78,7 @@ public class ProductDaoMem implements ProductDao {
             while (rs.next()){
                 product = new Product(rs.getInt("id"), rs.getString("name"), rs.getString("description"), rs.getFloat("price"), rs.getString("currency"), pcd.find(rs.getInt("productcategory_id")), sd.find(rs.getInt("supplier_id")), rs.getString("active"), rs.getString("image"));
             }
+            con.close();
         } catch (Exception ex) {
             System.out.println(ex);
         }
@@ -94,6 +97,7 @@ public class ProductDaoMem implements ProductDao {
                 Product newProduct = new Product(rs.getInt("id"), rs.getString("name"), rs.getString("description"), rs.getFloat("price"), rs.getString("currency"), pcd.find(rs.getInt("productcategory_id")), sd.find(rs.getInt("supplier_id")), rs.getString("active"), rs.getString("image"));
                 data.add(newProduct);
             }
+            con.close();
         } catch (Exception ex) {
             System.out.println(ex);
         }
@@ -113,6 +117,7 @@ public class ProductDaoMem implements ProductDao {
                 Product newProduct = new Product(rs.getInt("id"), rs.getString("name"), rs.getString("description"), rs.getFloat("price"), rs.getString("currency"), pcd.find(rs.getInt("productcategory_id")), sd.find(rs.getInt("supplier_id")), rs.getString("active"), rs.getString("image"));
                 data.add(newProduct);
             }
+            con.close();
         } catch (Exception ex) {
             System.out.println(ex);
         }
@@ -132,6 +137,7 @@ public class ProductDaoMem implements ProductDao {
                 Product newProduct = new Product(rs.getInt("id"), rs.getString("name"), rs.getString("description"), rs.getFloat("price"), rs.getString("currency"), pcd.find(rs.getInt("productcategory_id")), sd.find(rs.getInt("supplier_id")), rs.getString("active"), rs.getString("image"));
                 data.add(newProduct);
             }
+            con.close();
         } catch (Exception ex) {
             System.out.println(ex);
         }
@@ -152,6 +158,7 @@ public class ProductDaoMem implements ProductDao {
                 Product newProduct = new Product(rs.getInt("id"), rs.getString("name"), rs.getString("description"), rs.getFloat("price"), rs.getString("currency"), pcd.find(rs.getInt("productcategory_id")), sd.find(rs.getInt("supplier_id")), rs.getString("active"), rs.getString("image"));
                 data.add(newProduct);
             }
+            con.close();
         } catch (Exception ex) {
             System.out.println(ex);
         }

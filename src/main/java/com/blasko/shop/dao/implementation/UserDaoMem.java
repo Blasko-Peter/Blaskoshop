@@ -39,6 +39,7 @@ public class UserDaoMem implements UserDao {
             Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
             PreparedStatement stmt = con.prepareStatement("INSERT INTO users (id, email, password) values('"+userId+"','"+userEmail+"','"+userPassword+"')");
             stmt.execute();
+            con.close();
         } catch (Exception ex) {
             System.out.println(ex);
         }
@@ -56,6 +57,26 @@ public class UserDaoMem implements UserDao {
                 User newuser = new User(rs.getInt("id"), rs.getString("email"), rs.getString("password"));
                 data.add(newuser);
             }
+            con.close();
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        return data;
+    }
+
+    @Override
+    public List<User> find(int id) {
+        data = new ArrayList<>();
+        try {
+            Class.forName("org.postgresql.Driver");
+            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM users WHERE id = " + id + ";");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                User newuser = new User(rs.getInt("id"), rs.getString("email"), rs.getString("password"));
+                data.add(newuser);
+            }
+            con.close();
         } catch (Exception ex) {
             System.out.println(ex);
         }
@@ -91,6 +112,7 @@ public class UserDaoMem implements UserDao {
                 User newuser = new User(rs.getInt("id"), rs.getString("email"), rs.getString("password"));
                 data.add(newuser);
             }
+            con.close();
         } catch (Exception ex) {
             System.out.println(ex);
         }

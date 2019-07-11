@@ -8,6 +8,7 @@ public interface UserDao {
 
     void add(User user);
     List<User> find(String email);
+    List<User> find(int id);
     boolean checkEmail(String email);
     boolean checkPassword (String password);
     List<User> getAll();

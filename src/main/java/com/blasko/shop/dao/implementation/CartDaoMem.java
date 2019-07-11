@@ -5,10 +5,8 @@ import com.blasko.shop.dao.ProductDao;
 import com.blasko.shop.model.Cart;
 import com.blasko.shop.model.Product;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +20,7 @@ public class CartDaoMem implements CartDao {
     private List<Integer> integers;
     private static CartDaoMem instance = null;
     ProductDao pd = ProductDaoMem.getInstance();
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH.mm.ss");
 
     private CartDaoMem() {
     }
@@ -38,8 +37,9 @@ public class CartDaoMem implements CartDao {
         try {
             Class.forName("org.postgresql.Driver");
             Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
-            PreparedStatement stmt = con.prepareStatement("INSERT INTO carts (id, user_id, active, historydate, product01, product02, product03, product04, product05, product06, product07, product08, product09, product10, product11, product12, product13, product14, product15, product16, product17, product18, product19, product20, product21, product22, product23, product24, product25, product26, product27, product28, product29, product30) values('"+cart.getId()+"','"+cart.getUser_id()+"','"+cart.getActive()+"','"+cart.getHistorydate()+"',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);");
+            PreparedStatement stmt = con.prepareStatement("INSERT INTO carts (id, user_id, active, historydate, product01, product02, product03, product04, product05, product06, product07, product08, product09, product10, product11, product12, product13, product14, product15, quantity01, quantity02, quantity03, quantity04, quantity05, quantity06, quantity07, quantity08, quantity09, quantity10, quantity11, quantity12, quantity13, quantity14, quantity15, address_id) values('"+cart.getId()+"','"+cart.getUser_id()+"','"+cart.getActive()+"','"+cart.getHistorydate()+"',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"+cart.getAddress_id()+");");
             stmt.execute();
+            con.close();
         } catch (Exception ex) {
             System.out.println(ex);
         }
@@ -72,21 +72,21 @@ public class CartDaoMem implements CartDao {
                 products.add(rs.getInt("product13"));
                 products.add(rs.getInt("product14"));
                 products.add(rs.getInt("product15"));
-                integers.add(rs.getInt("product16"));
-                integers.add(rs.getInt("product17"));
-                integers.add(rs.getInt("product18"));
-                integers.add(rs.getInt("product19"));
-                integers.add(rs.getInt("product20"));
-                integers.add(rs.getInt("product21"));
-                integers.add(rs.getInt("product22"));
-                integers.add(rs.getInt("product23"));
-                integers.add(rs.getInt("product24"));
-                integers.add(rs.getInt("product25"));
-                integers.add(rs.getInt("product26"));
-                integers.add(rs.getInt("product27"));
-                integers.add(rs.getInt("product28"));
-                integers.add(rs.getInt("product29"));
-                integers.add(rs.getInt("product30"));
+                integers.add(rs.getInt("quantity01"));
+                integers.add(rs.getInt("quantity02"));
+                integers.add(rs.getInt("quantity03"));
+                integers.add(rs.getInt("quantity04"));
+                integers.add(rs.getInt("quantity05"));
+                integers.add(rs.getInt("quantity06"));
+                integers.add(rs.getInt("quantity07"));
+                integers.add(rs.getInt("quantity08"));
+                integers.add(rs.getInt("quantity09"));
+                integers.add(rs.getInt("quantity10"));
+                integers.add(rs.getInt("quantity11"));
+                integers.add(rs.getInt("quantity12"));
+                integers.add(rs.getInt("quantity13"));
+                integers.add(rs.getInt("quantity14"));
+                integers.add(rs.getInt("quantity15"));
                 for(int i = 0; i < products.size(); i++){
                     if(products.get(i) == 0){
                         continue;
@@ -94,9 +94,10 @@ public class CartDaoMem implements CartDao {
                         shopcart.put(products.get(i), integers.get(i));
                     }
                 }
-                Cart newCart = new Cart(rs.getInt("id"), rs.getInt("user_id"), rs.getString("active"), rs.getString("historydate"), shopcart);
+                Cart newCart = new Cart(rs.getInt("id"), rs.getInt("user_id"), rs.getString("active"), rs.getString("historydate"), shopcart, rs.getInt("address_id"));
                 data.add(newCart);
             }
+            con.close();
         } catch (Exception ex) {
             System.out.println(ex);
         }
@@ -112,22 +113,23 @@ public class CartDaoMem implements CartDao {
             PreparedStatement stmt = con.prepareStatement("SELECT * FROM carts WHERE user_id = " + user_id + " AND active = 'active';");
             ResultSet rs = stmt.executeQuery();
             while (rs.next()){
-                items += (rs.getInt("product16"));
-                items += (rs.getInt("product17"));
-                items += (rs.getInt("product18"));
-                items += (rs.getInt("product19"));
-                items += (rs.getInt("product20"));
-                items += (rs.getInt("product21"));
-                items += (rs.getInt("product22"));
-                items += (rs.getInt("product23"));
-                items += (rs.getInt("product24"));
-                items += (rs.getInt("product25"));
-                items += (rs.getInt("product26"));
-                items += (rs.getInt("product27"));
-                items += (rs.getInt("product28"));
-                items += (rs.getInt("product29"));
-                items += (rs.getInt("product30"));
+                items += (rs.getInt("quantity01"));
+                items += (rs.getInt("quantity02"));
+                items += (rs.getInt("quantity03"));
+                items += (rs.getInt("quantity04"));
+                items += (rs.getInt("quantity05"));
+                items += (rs.getInt("quantity06"));
+                items += (rs.getInt("quantity07"));
+                items += (rs.getInt("quantity08"));
+                items += (rs.getInt("quantity09"));
+                items += (rs.getInt("quantity10"));
+                items += (rs.getInt("quantity11"));
+                items += (rs.getInt("quantity12"));
+                items += (rs.getInt("quantity13"));
+                items += (rs.getInt("quantity14"));
+                items += (rs.getInt("quantity15"));
             }
+            con.close();
         } catch (Exception ex) {
             System.out.println(ex);
         }
@@ -136,7 +138,57 @@ public class CartDaoMem implements CartDao {
 
     @Override
     public List<Cart> findAll(int user_id) {
-        return null;
+        data = new ArrayList<>();
+        try {
+            Class.forName("org.postgresql.Driver");
+            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM carts WHERE active = 'ordered' AND user_id = "+user_id+";");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                shopcart = new HashMap<>();
+                products = new ArrayList<>();
+                integers = new ArrayList<>();
+                products.add(rs.getInt("product01"));
+                products.add(rs.getInt("product02"));
+                products.add(rs.getInt("product03"));
+                products.add(rs.getInt("product04"));
+                products.add(rs.getInt("product05"));
+                products.add(rs.getInt("product06"));
+                products.add(rs.getInt("product07"));
+                products.add(rs.getInt("product08"));
+                products.add(rs.getInt("product09"));
+                products.add(rs.getInt("product10"));
+                products.add(rs.getInt("product11"));
+                products.add(rs.getInt("product12"));
+                products.add(rs.getInt("product13"));
+                products.add(rs.getInt("product14"));
+                products.add(rs.getInt("product15"));
+                integers.add(rs.getInt("quantity01"));
+                integers.add(rs.getInt("quantity02"));
+                integers.add(rs.getInt("quantity03"));
+                integers.add(rs.getInt("quantity04"));
+                integers.add(rs.getInt("quantity05"));
+                integers.add(rs.getInt("quantity06"));
+                integers.add(rs.getInt("quantity07"));
+                integers.add(rs.getInt("quantity08"));
+                integers.add(rs.getInt("quantity09"));
+                integers.add(rs.getInt("quantity10"));
+                integers.add(rs.getInt("quantity11"));
+                integers.add(rs.getInt("quantity12"));
+                integers.add(rs.getInt("quantity13"));
+                integers.add(rs.getInt("quantity14"));
+                integers.add(rs.getInt("quantity15"));
+                for(int i = 0; i < products.size(); i++){
+                    shopcart.put(products.get(i), integers.get(i));
+                }
+                Cart newCart = new Cart(rs.getInt("id"), rs.getInt("user_id"), rs.getString("active"), rs.getString("historydate"), shopcart, rs.getInt("address_id"));
+                data.add(newCart);
+            }
+            con.close();
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        return data;
     }
 
     @Override
@@ -166,27 +218,28 @@ public class CartDaoMem implements CartDao {
                 products.add(rs.getInt("product13"));
                 products.add(rs.getInt("product14"));
                 products.add(rs.getInt("product15"));
-                integers.add(rs.getInt("product16"));
-                integers.add(rs.getInt("product17"));
-                integers.add(rs.getInt("product18"));
-                integers.add(rs.getInt("product19"));
-                integers.add(rs.getInt("product20"));
-                integers.add(rs.getInt("product21"));
-                integers.add(rs.getInt("product22"));
-                integers.add(rs.getInt("product23"));
-                integers.add(rs.getInt("product24"));
-                integers.add(rs.getInt("product25"));
-                integers.add(rs.getInt("product26"));
-                integers.add(rs.getInt("product27"));
-                integers.add(rs.getInt("product28"));
-                integers.add(rs.getInt("product29"));
-                integers.add(rs.getInt("product30"));
+                integers.add(rs.getInt("quantity01"));
+                integers.add(rs.getInt("quantity02"));
+                integers.add(rs.getInt("quantity03"));
+                integers.add(rs.getInt("quantity04"));
+                integers.add(rs.getInt("quantity05"));
+                integers.add(rs.getInt("quantity06"));
+                integers.add(rs.getInt("quantity07"));
+                integers.add(rs.getInt("quantity08"));
+                integers.add(rs.getInt("quantity09"));
+                integers.add(rs.getInt("quantity10"));
+                integers.add(rs.getInt("quantity11"));
+                integers.add(rs.getInt("quantity12"));
+                integers.add(rs.getInt("quantity13"));
+                integers.add(rs.getInt("quantity14"));
+                integers.add(rs.getInt("quantity15"));
                 for(int i = 0; i < products.size(); i++){
                     shopcart.put(products.get(i), integers.get(i));
                 }
-                Cart newCart = new Cart(rs.getInt("id"), rs.getInt("user_id"), rs.getString("active"), rs.getString("historydate"), shopcart);
+                Cart newCart = new Cart(rs.getInt("id"), rs.getInt("user_id"), rs.getString("active"), rs.getString("historydate"), shopcart, rs.getInt("address_id"));
                 data.add(newCart);
             }
+            con.close();
         } catch (Exception ex) {
             System.out.println(ex);
         }
@@ -206,8 +259,9 @@ public class CartDaoMem implements CartDao {
         try {
             Class.forName("org.postgresql.Driver");
             Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
-            PreparedStatement stmt = con.prepareStatement("UPDATE carts SET product01 = " + keys[0] + ", product02 = " + keys[1] + ", product03 = " + keys[2] + ", product04 = " + keys[3] + ", product05 = " + keys[4] + ", product06 = " + keys[5] + ", product07 = " + keys[6] + ", product08 = " + keys[7] + ", product09 = " + keys[8] + ", product10 = " + keys[9] + ", product11 = " + keys[10] + ", product12 = " + keys[11] + ", product13 = " + keys[12] + ", product14 = " + keys[13] + ", product15 = " + keys[14] + ", product16 = " + values[0] + ", product17 = " + values[1] + ", product18 = " + values[2] + ", product19 = " + values[3] + ", product20 = " + values[4] + ", product21 = " + values[5] + ", product22 = " + values[6] + ", product23 = " + values[7] + ", product24 = " + values[8] + ", product25 = " + values[9] + ", product26 = " + values[10] + ", product27 = " + values[11] + ", product28 = " + values[12] + ", product29 = " + values[13] + ", product30 = " + values[14] + "  WHERE id = " + cart.getId() + ";");
+            PreparedStatement stmt = con.prepareStatement("UPDATE carts SET product01 = " + keys[0] + ", product02 = " + keys[1] + ", product03 = " + keys[2] + ", product04 = " + keys[3] + ", product05 = " + keys[4] + ", product06 = " + keys[5] + ", product07 = " + keys[6] + ", product08 = " + keys[7] + ", product09 = " + keys[8] + ", product10 = " + keys[9] + ", product11 = " + keys[10] + ", product12 = " + keys[11] + ", product13 = " + keys[12] + ", product14 = " + keys[13] + ", product15 = " + keys[14] + ", quantity01 = " + values[0] + ", quantity02 = " + values[1] + ", quantity03 = " + values[2] + ", quantity04 = " + values[3] + ", quantity05 = " + values[4] + ", quantity06 = " + values[5] + ", quantity07 = " + values[6] + ", quantity08 = " + values[7] + ", quantity09 = " + values[8] + ", quantity10 = " + values[9] + ", quantity11 = " + values[10] + ", quantity12 = " + values[11] + ", quantity13 = " + values[12] + ", quantity14 = " + values[13] + ", quantity15 = " + values[14] + "  WHERE id = " + cart.getId() + ";");
             stmt.execute();
+            con.close();
         } catch (Exception ex) {
             System.out.println(ex);
         }
@@ -233,6 +287,21 @@ public class CartDaoMem implements CartDao {
             totalPrice += (productPrice * quantity);
         }
         return totalPrice;
+    }
+
+    @Override
+    public void closeCartById(int cart_id, int address_id) {
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        String historydate = sdf.format(timestamp);
+        try {
+            Class.forName("org.postgresql.Driver");
+            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
+            PreparedStatement stmt = con.prepareStatement("UPDATE carts SET active = 'ordered', historydate = '"+historydate+"', address_id = "+address_id+" WHERE id = " + cart_id + ";");
+            stmt.execute();
+            con.close();
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
     }
 
 

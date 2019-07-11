@@ -12,23 +12,26 @@ public class Cart {
     private String active;
     private String historydate;
     private Map<Integer, Integer> shopcart;
+    private int address_id;
 
     CartDao cd = CartDaoMem.getInstance();
 
-    public Cart(int user_id, String active, String historydate, Map<Integer, Integer> shopcart) {
+    public Cart(int user_id, String active, String historydate, Map<Integer, Integer> shopcart, int address_id) {
         this.id = cd.getAll().size() + 1;
         this.user_id = user_id;
         this.active = active;
         this.historydate = historydate;
         this.shopcart = shopcart;
+        this.address_id = address_id;
     }
 
-    public Cart(int id, int user_id, String active, String historydate, Map<Integer, Integer> shopcart) {
+    public Cart(int id, int user_id, String active, String historydate, Map<Integer, Integer> shopcart, int address_id) {
         this.id = id;
         this.user_id = user_id;
         this.active = active;
         this.historydate = historydate;
         this.shopcart = shopcart;
+        this.address_id = address_id;
     }
 
     public int getId() {
@@ -69,6 +72,14 @@ public class Cart {
 
     public void setShopcart(Map<Integer, Integer> shopcart) {
         this.shopcart = shopcart;
+    }
+
+    public int getAddress_id() {
+        return address_id;
+    }
+
+    public void setAddress_id(int address_id) {
+        this.address_id = address_id;
     }
 
 }

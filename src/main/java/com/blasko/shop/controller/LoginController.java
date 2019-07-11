@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +31,7 @@ public class LoginController extends HttpServlet {
     private String login = "";
     UserDao ud = UserDaoMem.getInstance();
     CartDao cd = CartDaoMem.getInstance();
-
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH.mm.ss");
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -54,7 +56,9 @@ public class LoginController extends HttpServlet {
             List<Cart> usercart = cd.findActive(user.get(0).getId());
             if(usercart.size() == 0){
                 Map<Integer, Integer> shopcart = new HashMap<>();
-                Cart newcart = new Cart(user.get(0).getId(), "active", "2019-07-05", shopcart);
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                String historydate = sdf.format(timestamp);
+                Cart newcart = new Cart(user.get(0).getId(), "active", historydate, shopcart, 1);
                 cd.add(newcart);
             }
             resp.sendRedirect("/");
