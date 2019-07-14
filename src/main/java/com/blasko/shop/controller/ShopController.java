@@ -28,6 +28,8 @@ public class ShopController extends HttpServlet {
         } else {
             actualShopCart.getShopcart().put(Integer.parseInt(itemId), 1);
         }
+        int newTotalPrice = cd.getTotalPrice(cd.mapConverter(actualShopCart.getShopcart()));
+        actualShopCart.setTotalPrice(newTotalPrice);
         cd.updateCart(actualShopCart);
         Cart newCart = cd.findActive((Integer) session.getAttribute("userid")).get(0);
         session.setAttribute("shopcart", newCart);

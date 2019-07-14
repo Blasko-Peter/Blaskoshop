@@ -46,6 +46,7 @@ public class HomeController extends HttpServlet {
             session.setAttribute("histories", histories);
             TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
             WebContext context = new WebContext(req, resp, req.getServletContext());
+            context.setVariable("histories", histories);
             context.setVariable("categories", pcd.getAll());
             context.setVariable("suppliers", sd.getAll());
             context.setVariable("products", getActualProducts());

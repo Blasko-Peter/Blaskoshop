@@ -97,7 +97,7 @@ public class OrderController extends HttpServlet {
             Map<Integer, Integer> shopcart = new HashMap<>();
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
             String historydate = sdf.format(timestamp);
-            Cart newcart = new Cart(userId, "active", historydate, shopcart, 1);
+            Cart newcart = new Cart(userId, "active", historydate, shopcart, 1, 0);
             cd.add(newcart);
             resp.sendRedirect("/end");
         }

@@ -54,6 +54,8 @@ public class ShopcartController extends HttpServlet {
         } else {
             actualShopCart.getShopcart().remove(Integer.parseInt(itemId));
         }
+        int newTotalPrice = cd.getTotalPrice(cd.mapConverter(actualShopCart.getShopcart()));
+        actualShopCart.setTotalPrice(newTotalPrice);
         cd.updateCart(actualShopCart);
         Cart newCart = cd.findActive((Integer) session.getAttribute("userid")).get(0);
         session.setAttribute("shopcart", newCart);
