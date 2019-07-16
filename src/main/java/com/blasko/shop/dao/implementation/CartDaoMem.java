@@ -4,6 +4,7 @@ import com.blasko.shop.dao.CartDao;
 import com.blasko.shop.dao.ProductDao;
 import com.blasko.shop.model.Cart;
 import com.blasko.shop.model.Product;
+import com.blasko.shop.service.DatabaseContact;
 
 import java.sql.*;
 import java.text.SimpleDateFormat;
@@ -22,6 +23,7 @@ public class CartDaoMem implements CartDao {
     ProductDao pd = ProductDaoMem.getInstance();
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH.mm.ss");
     private List<Map<Product, Integer>> histories;
+    private DatabaseContact dbc = new DatabaseContact();
 
     private CartDaoMem() {
     }
@@ -37,7 +39,7 @@ public class CartDaoMem implements CartDao {
     public void add(Cart cart) {
         try {
             Class.forName("org.postgresql.Driver");
-            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
+            Connection con = DriverManager.getConnection(dbc.url, dbc.user, dbc.password);
             PreparedStatement stmt = con.prepareStatement("INSERT INTO carts (id, user_id, active, historydate, product01, product02, product03, product04, product05, product06, product07, product08, product09, product10, product11, product12, product13, product14, product15, quantity01, quantity02, quantity03, quantity04, quantity05, quantity06, quantity07, quantity08, quantity09, quantity10, quantity11, quantity12, quantity13, quantity14, quantity15, address_id, totalprice) values('"+cart.getId()+"','"+cart.getUser_id()+"','"+cart.getActive()+"','"+cart.getHistorydate()+"',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"+cart.getAddress_id()+","+cart.getTotalPrice()+");");
             stmt.execute();
             con.close();
@@ -51,7 +53,7 @@ public class CartDaoMem implements CartDao {
         data = new ArrayList<>();
         try {
             Class.forName("org.postgresql.Driver");
-            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
+            Connection con = DriverManager.getConnection(dbc.url, dbc.user, dbc.password);
             PreparedStatement stmt = con.prepareStatement("SELECT * FROM carts WHERE user_id = " + user_id + " AND active = 'active';");
             ResultSet rs = stmt.executeQuery();
             while (rs.next()){
@@ -110,7 +112,7 @@ public class CartDaoMem implements CartDao {
         int items = 0;
         try {
             Class.forName("org.postgresql.Driver");
-            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
+            Connection con = DriverManager.getConnection(dbc.url, dbc.user, dbc.password);
             PreparedStatement stmt = con.prepareStatement("SELECT * FROM carts WHERE user_id = " + user_id + " AND active = 'active';");
             ResultSet rs = stmt.executeQuery();
             while (rs.next()){
@@ -142,7 +144,7 @@ public class CartDaoMem implements CartDao {
         data = new ArrayList<>();
         try {
             Class.forName("org.postgresql.Driver");
-            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
+            Connection con = DriverManager.getConnection(dbc.url, dbc.user, dbc.password);
             PreparedStatement stmt = con.prepareStatement("SELECT * FROM carts WHERE active = 'ordered' AND user_id = "+user_id+";");
             ResultSet rs = stmt.executeQuery();
             while (rs.next()){
@@ -201,7 +203,7 @@ public class CartDaoMem implements CartDao {
         data = new ArrayList<>();
         try {
             Class.forName("org.postgresql.Driver");
-            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
+            Connection con = DriverManager.getConnection(dbc.url, dbc.user, dbc.password);
             PreparedStatement stmt = con.prepareStatement("SELECT * FROM carts");
             ResultSet rs = stmt.executeQuery();
             while (rs.next()){
@@ -263,7 +265,7 @@ public class CartDaoMem implements CartDao {
         }
         try {
             Class.forName("org.postgresql.Driver");
-            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
+            Connection con = DriverManager.getConnection(dbc.url, dbc.user, dbc.password);
             PreparedStatement stmt = con.prepareStatement("UPDATE carts SET product01 = " + keys[0] + ", product02 = " + keys[1] + ", product03 = " + keys[2] + ", product04 = " + keys[3] + ", product05 = " + keys[4] + ", product06 = " + keys[5] + ", product07 = " + keys[6] + ", product08 = " + keys[7] + ", product09 = " + keys[8] + ", product10 = " + keys[9] + ", product11 = " + keys[10] + ", product12 = " + keys[11] + ", product13 = " + keys[12] + ", product14 = " + keys[13] + ", product15 = " + keys[14] + ", quantity01 = " + values[0] + ", quantity02 = " + values[1] + ", quantity03 = " + values[2] + ", quantity04 = " + values[3] + ", quantity05 = " + values[4] + ", quantity06 = " + values[5] + ", quantity07 = " + values[6] + ", quantity08 = " + values[7] + ", quantity09 = " + values[8] + ", quantity10 = " + values[9] + ", quantity11 = " + values[10] + ", quantity12 = " + values[11] + ", quantity13 = " + values[12] + ", quantity14 = " + values[13] + ", quantity15 = " + values[14] + ", totalprice = " + cart.getTotalPrice() + "  WHERE id = " + cart.getId() + ";");
             stmt.execute();
             con.close();
@@ -300,7 +302,7 @@ public class CartDaoMem implements CartDao {
         String historydate = sdf.format(timestamp);
         try {
             Class.forName("org.postgresql.Driver");
-            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
+            Connection con = DriverManager.getConnection(dbc.url, dbc.user, dbc.password);
             PreparedStatement stmt = con.prepareStatement("UPDATE carts SET active = 'ordered', historydate = '"+historydate+"', address_id = "+address_id+" WHERE id = " + cart_id + ";");
             stmt.execute();
             con.close();

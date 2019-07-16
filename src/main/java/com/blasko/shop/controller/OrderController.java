@@ -23,6 +23,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,11 +49,19 @@ public class OrderController extends HttpServlet {
             message = "";
             Cart actualShopCart = (Cart) session.getAttribute("shopcart");
             Map<Product, Integer> products = cd.mapConverter(actualShopCart.getShopcart());
+            List<Address> addresses = ad.getAllAddressToUser((Integer) session.getAttribute("userid"));
+            int addressesnumber = addresses.size();
+            List<Address> actualAddress = new ArrayList<>();
+            int actualAddressNumber = actualAddress.size();
             TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
             WebContext context = new WebContext(req, resp, req.getServletContext());
             context.setVariable("products", products);
             context.setVariable("totalprice", cd.getTotalPrice(products));
             context.setVariable("message", message);
+            context.setVariable("addressesnumber", addressesnumber);
+            context.setVariable("addresses", addresses);
+            context.setVariable("actualAddress", actualAddress);
+            context.setVariable("actualAddressNumber", actualAddressNumber);
             engine.process("product/order.html", context, resp.getWriter());
         }
     }

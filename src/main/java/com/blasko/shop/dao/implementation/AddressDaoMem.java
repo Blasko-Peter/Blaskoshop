@@ -3,15 +3,13 @@ package com.blasko.shop.dao.implementation;
 import com.blasko.shop.dao.AddressDao;
 import com.blasko.shop.dao.UserDao;
 import com.blasko.shop.model.Address;
-import com.blasko.shop.model.Cart;
+import com.blasko.shop.service.DatabaseContact;
 
-import javax.servlet.http.HttpSession;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class AddressDaoMem implements AddressDao {
@@ -19,6 +17,7 @@ public class AddressDaoMem implements AddressDao {
     private List<Address> data;
     private static AddressDaoMem instance = null;
     UserDao ud = UserDaoMem.getInstance();
+    private DatabaseContact dbc = new DatabaseContact();
 
     private AddressDaoMem() {
     }
@@ -43,7 +42,7 @@ public class AddressDaoMem implements AddressDao {
         int userid = address.getUser().getId();
         try {
             Class.forName("org.postgresql.Driver");
-            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
+            Connection con = DriverManager.getConnection(dbc.url, dbc.user, dbc.password);
             PreparedStatement stmt = con.prepareStatement("INSERT INTO addresses (id, firstname, lastname, address, postalcode, city, country, phonenumber, user_id) values('"+addressId+"','"+firstname+"','"+lastname+"','"+actualaddress+"','"+postalcode+"','"+city+"','"+country+"','"+phonenumber+"','"+userid+"')");
             stmt.execute();
             con.close();
@@ -57,7 +56,7 @@ public class AddressDaoMem implements AddressDao {
         data = new ArrayList<>();
         try {
             Class.forName("org.postgresql.Driver");
-            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
+            Connection con = DriverManager.getConnection(dbc.url, dbc.user, dbc.password);
             PreparedStatement stmt = con.prepareStatement("SELECT * FROM addresses WHERE user_id = " + user_id + ";");
             ResultSet rs = stmt.executeQuery();
             while (rs.next()){
@@ -76,7 +75,7 @@ public class AddressDaoMem implements AddressDao {
         data = new ArrayList<>();
         try {
             Class.forName("org.postgresql.Driver");
-            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
+            Connection con = DriverManager.getConnection(dbc.url, dbc.user, dbc.password);
             PreparedStatement stmt = con.prepareStatement("SELECT * FROM addresses");
             ResultSet rs = stmt.executeQuery();
             while (rs.next()){
@@ -99,6 +98,25 @@ public class AddressDaoMem implements AddressDao {
             }
         }
         return address_id;
+    }
+
+    @Override
+    public List<Address> getAddressToAddress(String address) {
+        data = new ArrayList<>();
+        try {
+            Class.forName("org.postgresql.Driver");
+            Connection con = DriverManager.getConnection(dbc.url, dbc.user, dbc.password);
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM addresses WHERE address = '"+address+"';");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                Address newAddress = new Address(rs.getInt("id"), rs.getString("firstname"), rs.getString("lastname"), rs.getString("address"), rs.getString("postalcode"), rs.getString("city"), rs.getString("country"), rs.getString("phonenumber"), ud.find(rs.getInt("user_id")).get(0));
+                data.add(newAddress);
+            }
+            con.close();
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        return data;
     }
 
 }

@@ -2,6 +2,7 @@ package com.blasko.shop.dao.implementation;
 
 import com.blasko.shop.dao.ProductCategoryDao;
 import com.blasko.shop.model.ProductCategory;
+import com.blasko.shop.service.DatabaseContact;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -14,6 +15,7 @@ public class ProductCategoryDaoMem implements ProductCategoryDao {
 
     private List<ProductCategory> data = null;
     private static ProductCategoryDaoMem instance = null;
+    private DatabaseContact dbc = new DatabaseContact();
 
     private ProductCategoryDaoMem() {
 
@@ -34,7 +36,7 @@ public class ProductCategoryDaoMem implements ProductCategoryDao {
         String categoryDepartment = category.getDepartment();
         try {
             Class.forName("org.postgresql.Driver");
-            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
+            Connection con = DriverManager.getConnection(dbc.url, dbc.user, dbc.password);
             PreparedStatement stmt = con.prepareStatement("INSERT INTO productcategories (id, name, description, department) values('"+categoryId+"','"+categoryName+"','"+categoryDescription+"','"+categoryDepartment+"')");
             stmt.execute();
             con.close();
@@ -53,7 +55,7 @@ public class ProductCategoryDaoMem implements ProductCategoryDao {
         ProductCategory pc = null;
         try {
             Class.forName("org.postgresql.Driver");
-            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
+            Connection con = DriverManager.getConnection(dbc.url, dbc.user, dbc.password);
             PreparedStatement stmt = con.prepareStatement("SELECT * FROM productcategories WHERE id = " + id);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()){
@@ -71,7 +73,7 @@ public class ProductCategoryDaoMem implements ProductCategoryDao {
         ProductCategory pc = null;
         try {
             Class.forName("org.postgresql.Driver");
-            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
+            Connection con = DriverManager.getConnection(dbc.url, dbc.user, dbc.password);
             PreparedStatement stmt = con.prepareStatement("SELECT * FROM productcategories WHERE name = '" + name + "';");
             ResultSet rs = stmt.executeQuery();
             while (rs.next()){
@@ -89,7 +91,7 @@ public class ProductCategoryDaoMem implements ProductCategoryDao {
         data = new ArrayList<>();
         try {
             Class.forName("org.postgresql.Driver");
-            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
+            Connection con = DriverManager.getConnection(dbc.url, dbc.user, dbc.password);
             PreparedStatement stmt = con.prepareStatement("SELECT * FROM productcategories");
             ResultSet rs = stmt.executeQuery();
             while (rs.next()){

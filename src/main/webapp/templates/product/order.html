@@ -45,9 +45,39 @@
         <div class="container-fluid alert-message">
             <h1 th:text="${message}"></h1>
         </div>
+        <div th:if="${addressesnumber} == 0">
+        </div>
+        <div class="container-fluid grey" th:unless="${addressesnumber} == 0">
+            <div class="row">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="input-group mb-3 margin-top-16">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text">Address</label>
+                                </div>
+                                <select class="custom-select" name="addresssearch" form="addressform">
+                                    <option selected>New...</option>
+                                    <div th:each="address : ${addresses}">
+                                        <option th:text="${address.getAddressForm()}"></option>
+                                    </div>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="margin-top-16 search">
+                                <form id="addressform" action="/address" method="post">
+                                    <input type="submit" class="hundred-per-cent grey-other searchbtn" value="Choose"/>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="container">
             <div class="row">
-                <div class="col-md-12 col-lg-6 div-form hundred-per-cent">
+                <div class="col-md-12 col-lg-6 div-form hundred-per-cent" th:if="${actualAddressNumber} == 0">
                     <form class="form-side-order" action="/order" method="post">
                         <div class="input-group">
                             <div class="input-group-prepend max-igp-order">
@@ -90,6 +120,53 @@
                                 <span class="input-group-text input-header input-field">Phone Number</span>
                             </div>
                             <input type="text" class="form-control input-field" name="phoneNumber" width="100">
+                        </div>
+                        <input class="hundred-per-cent grey-other searchbtn input-field" type="submit" value="Order"/>
+                    </form>
+                </div>
+                <div class="col-md-12 col-lg-6 div-form hundred-per-cent" th:unless="${actualAddressNumber} == 0">
+                    <form class="form-side-order" action="/order" method="post" th:each="actual : ${actualAddress}">
+                        <div class="input-group">
+                            <div class="input-group-prepend max-igp-order">
+                                <span class="input-group-text input-header input-field">First Name</span>
+                            </div>
+                            <input type="text" class="form-control input-field" name="firstName" width="100" th:value="${actual.getFirstname()}">
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-prepend max-igp-order">
+                                <span class="input-group-text input-header input-field">Last Name</span>
+                            </div>
+                            <input type="text" class="form-control input-field" name="lastName" width="100" th:value="${actual.getLastname()}">
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-prepend max-igp-order">
+                                <span class="input-group-text input-header input-field">Address</span>
+                            </div>
+                            <input type="text" class="form-control input-field" name="address" width="100" th:value="${actual.getAddress()}">
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-prepend max-igp-order">
+                                <span class="input-group-text input-header input-field">Postalcode</span>
+                            </div>
+                            <input type="text" class="form-control input-field" name="postalCode" width="100" th:value="${actual.getPostalcode()}">
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-prepend max-igp-order">
+                                <span class="input-group-text input-header input-field">City</span>
+                            </div>
+                            <input type="text" class="form-control input-field" name="city" width="100" th:value="${actual.getCity()}">
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-prepend max-igp-order">
+                                <span class="input-group-text input-header input-field">Country</span>
+                            </div>
+                            <input type="text" class="form-control input-field" name="country" width="100" th:value="${actual.getCountry()}">
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-prepend max-igp-order">
+                                <span class="input-group-text input-header input-field">Phone Number</span>
+                            </div>
+                            <input type="text" class="form-control input-field" name="phoneNumber" width="100" th:value="${actual.getPhonenumber()}">
                         </div>
                         <input class="hundred-per-cent grey-other searchbtn input-field" type="submit" value="Order"/>
                     </form>

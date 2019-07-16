@@ -113,4 +113,8 @@ public class Address {
         this.user = user;
     }
 
+    public String getAddressForm() {
+        return this.city + "," + this.address;
+    }
+
 }

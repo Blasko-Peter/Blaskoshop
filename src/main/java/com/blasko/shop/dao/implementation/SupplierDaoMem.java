@@ -2,6 +2,7 @@ package com.blasko.shop.dao.implementation;
 
 import com.blasko.shop.model.Supplier;
 import com.blasko.shop.dao.SupplierDao;
+import com.blasko.shop.service.DatabaseContact;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -14,6 +15,7 @@ public class SupplierDaoMem implements SupplierDao{
 
     private List<Supplier> data = null;
     private static SupplierDaoMem instance = null;
+    private DatabaseContact dbc = new DatabaseContact();
 
     private SupplierDaoMem() {
     }
@@ -32,7 +34,7 @@ public class SupplierDaoMem implements SupplierDao{
         String supplierDescription = supplier.getDescription();
         try {
             Class.forName("org.postgresql.Driver");
-            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
+            Connection con = DriverManager.getConnection(dbc.url, dbc.user, dbc.password);
             PreparedStatement stmt = con.prepareStatement("INSERT INTO suppliers values('"+supplierId+"','"+supplierName+"','"+supplierDescription+"')");
             stmt.execute();
             con.close();
@@ -51,7 +53,7 @@ public class SupplierDaoMem implements SupplierDao{
         Supplier supplier = null;
         try {
             Class.forName("org.postgresql.Driver");
-            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
+            Connection con = DriverManager.getConnection(dbc.url, dbc.user, dbc.password);
             PreparedStatement stmt = con.prepareStatement("SELECT * FROM suppliers WHERE id = " + id);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()){
@@ -69,7 +71,7 @@ public class SupplierDaoMem implements SupplierDao{
         Supplier supplier = null;
         try {
             Class.forName("org.postgresql.Driver");
-            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
+            Connection con = DriverManager.getConnection(dbc.url, dbc.user, dbc.password);
             PreparedStatement stmt = con.prepareStatement("SELECT * FROM suppliers WHERE name = '" + name + "';");
             ResultSet rs = stmt.executeQuery();
             while (rs.next()){
@@ -87,7 +89,7 @@ public class SupplierDaoMem implements SupplierDao{
         data = new ArrayList<>();
         try {
             Class.forName("org.postgresql.Driver");
-            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
+            Connection con = DriverManager.getConnection(dbc.url, dbc.user, dbc.password);
             PreparedStatement stmt = con.prepareStatement("SELECT * FROM suppliers");
             ResultSet rs = stmt.executeQuery();
             while (rs.next()){

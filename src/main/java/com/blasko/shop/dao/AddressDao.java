@@ -10,5 +10,6 @@ public interface AddressDao {
     List<Address> getAllAddressToUser(int user_id);
     List<Address> findAll();
     int checkAddresses(List<Address> addresses, String firstName, String lastName, String address, String postalCode, String city, String country, String phoneNumber);
+    List<Address> getAddressToAddress(String address);
 
 }

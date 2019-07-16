@@ -2,6 +2,7 @@ package com.blasko.shop.dao.implementation;
 
 import com.blasko.shop.dao.UserDao;
 import com.blasko.shop.model.User;
+import com.blasko.shop.service.DatabaseContact;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class UserDaoMem implements UserDao {
 
     private List<User> data;
     private static UserDaoMem instance = null;
+    private DatabaseContact dbc = new DatabaseContact();
 
     private UserDaoMem() {
     }
@@ -36,7 +38,7 @@ public class UserDaoMem implements UserDao {
         String userPassword = user.getPassword();
         try {
             Class.forName("org.postgresql.Driver");
-            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
+            Connection con = DriverManager.getConnection(dbc.url, dbc.user, dbc.password);
             PreparedStatement stmt = con.prepareStatement("INSERT INTO users (id, email, password) values('"+userId+"','"+userEmail+"','"+userPassword+"')");
             stmt.execute();
             con.close();
@@ -50,7 +52,7 @@ public class UserDaoMem implements UserDao {
         data = new ArrayList<>();
         try {
             Class.forName("org.postgresql.Driver");
-            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
+            Connection con = DriverManager.getConnection(dbc.url, dbc.user, dbc.password);
             PreparedStatement stmt = con.prepareStatement("SELECT * FROM users WHERE email = '" + email + "';");
             ResultSet rs = stmt.executeQuery();
             while (rs.next()){
@@ -69,7 +71,7 @@ public class UserDaoMem implements UserDao {
         data = new ArrayList<>();
         try {
             Class.forName("org.postgresql.Driver");
-            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
+            Connection con = DriverManager.getConnection(dbc.url, dbc.user, dbc.password);
             PreparedStatement stmt = con.prepareStatement("SELECT * FROM users WHERE id = " + id + ";");
             ResultSet rs = stmt.executeQuery();
             while (rs.next()){
@@ -105,7 +107,7 @@ public class UserDaoMem implements UserDao {
         data = new ArrayList<>();
         try {
             Class.forName("org.postgresql.Driver");
-            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/shop", "postgres", "Madrid1975");
+            Connection con = DriverManager.getConnection(dbc.url, dbc.user, dbc.password);
             PreparedStatement stmt = con.prepareStatement("SELECT * FROM users");
             ResultSet rs = stmt.executeQuery();
             while (rs.next()){
