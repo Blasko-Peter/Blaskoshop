@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="author" content="Blasko" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blasko Shop</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+            integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous" defer></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous" defer></script>
+    <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+          integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css" />
+</head>
+<body class="bg-light">
+    <div th:if="${session.username} == ${'admin@admin.hu'}">
+        <div class="container-fluid pt-3 pb-3 text-center text-light blue" id="header">
+            <h1>Blasko Shop Product</h1>
+        </div>
+        <div class="container-fluid green">
+            <div class="row">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="margin-top-16 margin-bottom-16">
+                                <form id="product" action="/admin/product" method="get">
+                                    <input type="submit" class="hundred-per-cent grey-other searchbtn" value="Product"/>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="margin-top-16 margin-bottom-16">
+                                <form id="category" action="/admin/category" method="get">
+                                    <input type="submit" class="hundred-per-cent grey-other searchbtn" value="Category"/>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="margin-top-16 margin-bottom-16">
+                                <form id="supplier" action="/admin/supplier" method="get">
+                                    <input type="submit" class="hundred-per-cent grey-other searchbtn" value="Supplier"/>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="margin-top-16 margin-bottom-16">
+                                <form id="logout" action="/" method="get">
+                                    <input type="submit" class="hundred-per-cent grey-other searchbtn" value="Main"/>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid alert-message">
+            <h1 th:text="${message}"></h1>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="div-form hundred-per-cent">
+                    <form id="productadd" class="form-side" action="/admin/product" method="post">
+                        <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text input-header input-field">Product name</span>
+                        </div>
+                        <input type="text" class="form-control input-field" name="productname" width="100" multiple/>
+                    </div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text input-header input-field">Product description</span>
+                            </div>
+                            <input type="text" class="form-control input-field" name="productdescription" width="500">
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text input-header input-field">Product price</span>
+                            </div>
+                            <input type="text" class="form-control input-field" name="productprice" width="20">
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text input-header input-field">Product currency</span>
+                            </div>
+                            <input type="text" class="form-control input-field" name="productcurrency" width="20">
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text input-header input-field">Product category</label>
+                            </div>
+                            <select class="custom-select input-field" name="productcategory" form="productadd">
+                                <option selected>Choose...</option>
+                                <div th:each="category : ${categories}">
+                                    <option th:text="${category.name}"></option>
+                                </div>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text input-header input-field">Product supplier</label>
+                            </div>
+                            <select class="custom-select input-field" name="productsupplier" form="productadd">
+                                <option selected>Choose...</option>
+                                <div th:each="supplier : ${suppliers}">
+                                    <option th:text="${supplier.name}"></option>
+                                </div>
+                            </select>
+                        </div>
+                        <input class="hundred-per-cent grey-other searchbtn input-field" type="submit" value="Add"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div th:replace="footer.html :: copy"></div>
+    </div>
+    <div th:unless="${session.username} == ${'admin@admin.hu'}">
+        <div>
+            <h3>Login first, please!</h3>
+            <a href="/login">Go to login</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="author" content="Blasko" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blasko Shop</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+            integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous" defer></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous" defer></script>
+    <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+          integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css" />
+</head>
+<body class="bg-light">
+    <div class="container-fluid pt-3 pb-3 text-center text-light blue" id="header">
+        <h1>Blasko Shop Registration</h1>
+    </div>
+    <div class="container">
+        <div class="well well-sm center input-field">
+            <strong th:text="${message}"></strong>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="div-form hundred-per-cent">
+                <form class="form-side" action="/registration" method="post">
+                    <div class="input-group">
+                        <div class="input-group-prepend max-igp">
+                            <span class="input-group-text input-header input-field">Email address</span>
+                        </div>
+                        <input type="text" class="form-control input-field" name="email" width="100">
+                    </div>
+                    <div class="input-group">
+                        <div class="input-group-prepend max-igp">
+                            <span class="input-group-text input-header input-field">Password</span>
+                        </div>
+                        <input type="password" class="form-control input-field" name="password" width="100">
+                    </div>
+                    <input class="hundred-per-cent grey-other searchbtn input-field" type="submit" value="Registration"/>
+                </form>
+                <div class="form-side input-field">
+                    <a class="dark-grey-color" href="/login">Back to login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="footer.html :: copy"></div>
+</body>
+</html>

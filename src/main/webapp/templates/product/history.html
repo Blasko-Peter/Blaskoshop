@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="author" content="Blasko" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blasko Shop</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+            integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous" defer></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous" defer></script>
+    <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+          integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css" />
+</head>
+<body class="bg-light">
+    <div th:if="${session.username} != null">
+        <div class="container-fluid pt-3 pb-3 text-center text-light blue" id="header">
+            <h1>Blasko Shop History</h1>
+        </div>
+        <div class="container-fluid green">
+            <div class="row">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-9">
+                        </div>
+                        <div class="col-md-3">
+                            <div class="margin-top-16 margin-bottom-16">
+                                <form action="/" method="get">
+                                    <input type="submit" class="hundred-per-cent grey-other searchbtn" value="Main"/>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="div-form hundred-per-cent" th:each="history : ${histories}">
+                    <div>
+                        <div>
+                            <div class="input-group">
+                                <div>
+                                    <h3 th:text="${history.getHistorydate()}"></h3>
+                                </div>
+                                <table class="hundred-per-cent input-field form-side-6">
+                                    <tr>
+                                        <th class="margin-top-16 margin-bottom-16">Product Name</th>
+                                        <th class="margin-top-16 margin-bottom-16">Product Price</th>
+                                        <th class="center margin-top-16 margin-bottom-16">Quantity</th>
+                                        <th class="center margin-top-16 margin-bottom-16">Full Price</th>
+                                    </tr>
+                                    <tr th:each="product : ${history.getHistory()}">
+                                        <td class="margin-top-16 margin-bottom-16" th:text="${product.key.getName()}">Product Name</td>
+                                        <td th:id="itemprice + ${product.key.getId()}" class="center margin-top-16 margin-bottom-16" th:text="${product.key.getPriceForm()}">Product Price</td>
+                                        <td th:text="${product.value}" th:id="itemsvalue + ${product.key.getId()}" class="center margin-top-16 margin-bottom-16">Product Value</td>
+                                        <td th:id="itemallprice + ${product.key.getId()}" class="center margin-top-16 margin-bottom-16" th:text="${product.key.getPrice()} * ${product.value} * 1.0 + ' USD'">All Price</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="margin-top-16 margin-bottom-16"></td>
+                                        <td class="margin-top-16 margin-bottom-16"></td>
+                                        <td><h6 class="center margin-top-16 margin-bottom-16">Total Price:</h6></td>
+                                        <td><h6 id="totalprice" class="center margin-top-16 margin-bottom-16" th:text="${history.getTotalPrice} * 1.0 + ' USD'">Price</h6></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:replace="footer.html :: copy"></div>
+    </div>
+    <div th:unless="${session.username} != null">
+        <div>
+            <h3>Login first, please!</h3>
+            <a href="/login">Go to login</a>
+        </div>
+    </div>
+</body>
+</html>
